@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
     public void AddUnit(int alliance, int x, string unitType)
     {
         Transform target = p1Start;
-        if (alliance == 1)
+        if (alliance != 1)
         {
             target = p2Start;
         }
@@ -105,6 +105,11 @@ public class GameController : MonoBehaviour
     public Vector3 GetXPos(int index)
     {
         return lanes[index].xPos.position;
+    }
+
+    public UnitsInLane[] GetUnits()
+    {
+        return lanes;
     }
 
 }

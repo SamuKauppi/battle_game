@@ -46,9 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 200
+  damageMultiplier: 1
   attack_range: 0.65
   stop_range: 0.55
-  damage: 65
+  slashArmor: 20
+  thrustArmor: 30
+  bluntArmor: 10
+  specialArmor: 10
   maxAttackTargets: 2
   anim: {fileID: 6263984149670448313}
   speed: 0.75

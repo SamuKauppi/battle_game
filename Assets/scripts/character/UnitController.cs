@@ -7,13 +7,14 @@ public class UnitController : MonoBehaviour
 {
     public float hp;
     private float maxHp;
+    [SerializeField] private float damageMultiplier = 1;
     [SerializeField] private float attack_range;
     [SerializeField] private float stop_range;
     // Armor
-    [SerializeField] private float slashArmor;
-    [SerializeField] private float thrustArmor;
-    [SerializeField] private float bluntArmor;
-    [SerializeField] private float specialArmor;
+    [SerializeField] private float slashArmor = 10;
+    [SerializeField] private float thrustArmor = 10;
+    [SerializeField] private float bluntArmor = 10;
+    [SerializeField] private float specialArmor = 10;
 
     [SerializeField] private int maxAttackTargets;
 
@@ -114,13 +115,22 @@ public class UnitController : MonoBehaviour
     {
         foreach (TargetInRange target in targets)
         {
-            target.Target.TakeDamage(damage, damageType);
+            target.Target.TakeDamage(damage * damageMultiplier, damageType);
         }
     }
 
     public void TakeDamage(float amount, string damageType)
     {
-        hp -= amount * Random.Range(0.85f, 1.15f);
+        var multiplier = damageType switch
+        {
+            "thurst" => GetDamageModifier(thrustArmor),
+            "blunt" => GetDamageModifier(bluntArmor),
+            "special" => GetDamageModifier(specialArmor),
+            _ => GetDamageModifier(slashArmor),
+        };
+
+        hp -= amount * Random.Range(0.9f, 1.1f) * multiplier;
+
         StartCoroutine(ApplyKnockBack(amount * 0.025f));
         if (hp <= 0)
         {
@@ -129,6 +139,11 @@ public class UnitController : MonoBehaviour
         }
 
     }
+    private float GetDamageModifier(float armorValue)
+    {
+        return armorValue / (40 + Mathf.Abs(armorValue));
+    }
+
     IEnumerator ApplyKnockBack(float amount)
     {
         while (amount > 0)

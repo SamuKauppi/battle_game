@@ -4,13 +4,13 @@ using UnityEngine;
 
 public abstract class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Transform selector;
-    [SerializeField] private int selectedPos;
+    public Transform selector;
+    public int selectedPos;
     [SerializeField] private string selectedUnit;
-    [SerializeField] private int alliance;
+    public int alliance;
     private float spawnTimer;
     private float moveTimer;
-    private GameController manager;
+    public GameController manager;
     public int PosInput { get; set; }
     public int UnitInput { get; set; }
 
