@@ -55,7 +55,7 @@ MonoBehaviour:
   specialArmor: 10
   maxAttackTargets: 2
   anim: {fileID: 6263984149670448313}
-  speed: 0.75
+  speed: 1
   targets: []
 --- !u!1001 &6263984148705341736
 PrefabInstance:

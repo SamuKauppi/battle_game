@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private UnitsInLane[] lanes;
     [SerializeField] private Transform p1Start;
     [SerializeField] private Transform p2Start;
+    private int playerScores = 0;
     private ObjectPooler pooler;
 
     private void Awake()
@@ -52,6 +53,14 @@ public class GameController : MonoBehaviour
             {
                 lanes[Xindex].units.RemoveAt(i);
                 continue; // target is dead and will be removed
+            }
+
+            if (Mathf.Abs(target.transform.position.z) > 12f)
+            {
+                target.TakeDamage(target.hp * 10, "");
+                playerScores += target.Alliance;
+                Debug.Log("Score: " + playerScores);
+                continue; // target reached the end
             }
 
             if (target.Zindex == Zindex)

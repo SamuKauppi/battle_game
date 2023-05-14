@@ -468,6 +468,7 @@ MonoBehaviour:
   selectedPos: 4
   selectedUnit: dude
   alliance: 1
+  manager: {fileID: 0}
 --- !u!1001 &1450595667
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -679,3 +680,4 @@ MonoBehaviour:
   selectedPos: 4
   selectedUnit: dude
   alliance: -1
+  manager: {fileID: 0}
