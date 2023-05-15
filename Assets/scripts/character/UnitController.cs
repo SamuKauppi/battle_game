@@ -129,7 +129,7 @@ public class UnitController : MonoBehaviour
             _ => GetDamageModifier(slashArmor),
         };
 
-        hp -= amount * Random.Range(0.9f, 1.1f) * multiplier;
+        hp -= amount * Random.Range(0.8f, 1.2f) * multiplier;
 
         StartCoroutine(ApplyKnockBack(amount * 0.025f));
         if (hp <= 0)
@@ -141,7 +141,7 @@ public class UnitController : MonoBehaviour
     }
     private float GetDamageModifier(float armorValue)
     {
-        return armorValue / (40 + Mathf.Abs(armorValue));
+        return 1 - (armorValue / (40 + Mathf.Abs(armorValue)));
     }
 
     IEnumerator ApplyKnockBack(float amount)

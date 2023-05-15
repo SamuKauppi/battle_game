@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 public class GameController : MonoBehaviour
@@ -13,6 +14,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform p2Start;
     private int playerScores = 0;
     private ObjectPooler pooler;
+    [SerializeField] private Slider scoreSlider;
 
     private void Awake()
     {
@@ -58,8 +60,11 @@ public class GameController : MonoBehaviour
             if (Mathf.Abs(target.transform.position.z) > 12f)
             {
                 target.TakeDamage(target.hp * 10, "");
+                target.gameObject.SetActive(false);
                 playerScores += target.Alliance;
-                Debug.Log("Score: " + playerScores);
+                scoreSlider.value = playerScores;
+                if (Mathf.Abs(playerScores) >= 10)
+                    Debug.Log("Allicance: " + target.Alliance + " won!");
                 continue; // target reached the end
             }
 

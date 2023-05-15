@@ -8,6 +8,7 @@ public abstract class PlayerController : MonoBehaviour
     public int selectedPos;
     [SerializeField] private string selectedUnit;
     public int alliance;
+    [SerializeField] private float spawnTime = 2f;
     private float spawnTimer;
     private float moveTimer;
     public GameController manager;
@@ -22,31 +23,33 @@ public abstract class PlayerController : MonoBehaviour
 
     public void CheckPosInput()
     {
-        if (PosInput < 0 && moveTimer > 0.15f)
+        moveTimer += Time.deltaTime;
+        if (moveTimer < 0.15f)
+            return;
+
+        if (PosInput < 0)
         {
             moveTimer = 0f;
             selectedPos -= 1;
-            selectedPos = Mathf.Clamp(selectedPos, 0, 8);
-            selector.position = new Vector3(manager.GetXPos(selectedPos).x, 0, selector.transform.position.z);
+            selectedPos = Mathf.Clamp(selectedPos, 0, 8);    
             PosInput = 0;
         }
-        if (PosInput > 0 && moveTimer > 0.15f)
+        if (PosInput > 0)
         {
             moveTimer = 0f;
             selectedPos += 1;
             selectedPos = Mathf.Clamp(selectedPos, 0, 8);
-            selector.position = new Vector3(manager.GetXPos(selectedPos).x, 0, selector.transform.position.z);
             PosInput = 0;
         }
-        moveTimer += Time.deltaTime;
+        selector.position = new Vector3(manager.GetXPos(selectedPos).x, 0, selector.transform.position.z);
     }
 
     public void CheckSpawn()
     {
-        if (spawnTimer > 2)
+        if (spawnTimer > spawnTime)
         {
             manager.AddUnit(alliance, selectedPos, selectedUnit);
-            spawnTimer = 0;
+            spawnTimer = 0f;
         }
         spawnTimer += Time.deltaTime;
     }

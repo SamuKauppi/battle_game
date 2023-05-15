@@ -13,6 +13,8 @@ public class AiController : PlayerController
     private float biggestDifference = 0;
     private float leastAllies = 0;
 
+    [SerializeField] private float timeBetweenChecks = 3f;
+    [SerializeField] private float emergencyDist = 3f;
     private void Update()
     {
         checkTimer += Time.deltaTime;
@@ -33,12 +35,17 @@ public class AiController : PlayerController
         CheckPosInput();
         CheckSpawn();
 
-        if (checkTimer <= 3f)
+        if (checkTimer <= timeBetweenChecks)
         {
             return;
         }
-        checkTimer = 0;
+        shortestDistance = 0f;
+        biggestDifference = 0f;
+        shortestDistance = 0f;
+        leastAllies = 0f;
+        checkTimer = 0f;
         lanes = manager.GetUnits();
+
         for (int i = 0; i < lanes.Length; i++)
         {
             int allies = 0;
@@ -52,23 +59,24 @@ public class AiController : PlayerController
                 }
                 enemies++;
                 float distance = Mathf.Abs(transform.position.z - unit.transform.position.z);
-                if (distance < 3f)
-                {
-                    desiredIndex = i;
-                    return;
-                }
                 if (distance < shortestDistance || shortestDistance == 0)
                 {
                     indexes[0] = i;
                     shortestDistance = distance;
                 }
             }
+
+            if (shortestDistance < emergencyDist && enemies - allies > 3)
+            {
+                desiredIndex = i;
+                return;
+            }
             if (biggestDifference < enemies - allies)
             {
                 biggestDifference = enemies - allies;
                 indexes[1] = i;
             }
-            if (allies < leastAllies)
+            if (allies < leastAllies || leastAllies == 0f)
             {
                 leastAllies = allies;
                 indexes[2] = i;
@@ -77,10 +85,6 @@ public class AiController : PlayerController
 
         indexes[3] = Random.Range(0, lanes.Length);
         desiredIndex = indexes[Random.Range(0, indexes.Length)];
-
-        shortestDistance = 0f;
-        biggestDifference = 0f;
-        shortestDistance = 0f;
     }
 
 }

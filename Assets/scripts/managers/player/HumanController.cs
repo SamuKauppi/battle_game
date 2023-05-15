@@ -6,11 +6,11 @@ public class HumanController : PlayerController
 {
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             PosInput = -1;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
             PosInput = 1;
         }
