@@ -10,8 +10,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
     [SerializeField] private UnitsInLane[] lanes;
-    [SerializeField] private Transform p1Start;
-    [SerializeField] private Transform p2Start;
+    [SerializeField] private Vector3 distance;
     private int playerScores = 0;
     private ObjectPooler pooler;
     [SerializeField] private Slider scoreSlider;
@@ -21,20 +20,14 @@ public class GameController : MonoBehaviour
         Instance = this;
     }
 
-    public void AddUnit(int alliance, int x, string unitType)
+    public void AddUnit(int alliance, int x, Vector3 pos, Quaternion rot, string unitType)
     {
-        Transform target = p1Start;
-        if (alliance != 1)
-        {
-            target = p2Start;
-        }
-
         if (!pooler)
             pooler = ObjectPooler.Instance;
 
         UnitController unit = pooler.GetPooledObject(unitType).GetComponent<UnitController>();
 
-        unit.transform.SetPositionAndRotation(new Vector3(lanes[x].xPos.transform.position.x, 0, target.position.z), target.rotation);
+        unit.transform.SetPositionAndRotation(pos, rot);
         unit.Xindex = x;
         unit.Zindex = lanes[x].indexCounter;
         lanes[x].indexCounter += 1;

@@ -48,7 +48,7 @@ public abstract class PlayerController : MonoBehaviour
     {
         if (spawnTimer > spawnTime)
         {
-            manager.AddUnit(alliance, selectedPos, selectedUnit);
+            manager.AddUnit(alliance, selectedPos, selector.position, transform.rotation, selectedUnit);
             spawnTimer = 0f;
         }
         spawnTimer += Time.deltaTime;

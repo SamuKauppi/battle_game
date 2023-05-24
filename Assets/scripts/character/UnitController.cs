@@ -90,6 +90,7 @@ public class UnitController : MonoBehaviour
         }
         foreach (TargetInRange target in targets)
         {
+
             if (target.InStopRange)
             {
                 SetMoving(false);

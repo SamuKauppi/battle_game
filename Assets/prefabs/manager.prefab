@@ -401,24 +401,33 @@ MonoBehaviour:
   lanes:
   - units: []
     xPos: {fileID: 8999127365237165056}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 8923107800615001071}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 5980550839642154761}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 4569349264982820807}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 8455695376427465977}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 689033023527992015}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 257427248543244890}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 8779312863649026649}
+    indexCounter: 0
   - units: []
     xPos: {fileID: 6373424903895619651}
-  p1Start: {fileID: 8641449422520534171}
-  p2Start: {fileID: 8641449422745478674}
+    indexCounter: 0
+  distance: {x: 0, y: 0, z: 0}
+  scoreSlider: {fileID: 0}
 --- !u!1 &8641449422723360791
 GameObject:
   m_ObjectHideFlags: 0

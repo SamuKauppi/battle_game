@@ -58,7 +58,7 @@ public class AiController : PlayerController
                     continue;
                 }
                 enemies++;
-                float distance = Mathf.Abs(transform.position.z - unit.transform.position.z);
+                float distance = Mathf.Abs((unit.transform.position - transform.position).z);
                 if (distance < shortestDistance || shortestDistance == 0)
                 {
                     indexes[0] = i;
@@ -66,7 +66,7 @@ public class AiController : PlayerController
                 }
             }
 
-            if (shortestDistance < emergencyDist && enemies - allies > 3)
+            if (shortestDistance < emergencyDist && enemies - allies > 0)
             {
                 desiredIndex = i;
                 return;
