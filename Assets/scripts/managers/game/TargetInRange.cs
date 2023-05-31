@@ -5,15 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class TargetInRange
 {
-    public TargetInRange(UnitController target, int alliance, bool inStop) 
+    public TargetInRange(UnitController target, int alliance, bool inStop, float distance) 
     {
         Target = target;
         Alliance = alliance;
         InStopRange = inStop;
-        targetalliance = alliance;
+        DistanceToTarget = distance;
     }
     public UnitController Target { get; private set; }
     public int Alliance { get; private set; }
     public bool InStopRange { get; private set; }
-    public int targetalliance;
+    public float DistanceToTarget { get; private set; }
 }

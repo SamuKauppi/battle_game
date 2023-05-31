@@ -5,20 +5,16 @@ using UnityEngine;
 public class AiController : PlayerController
 {
     UnitsInLane[] lanes = null;
-    private float checkTimer;
-    private int desiredIndex;
-    private int[] indexes = new int[4];
+    private int desiredIndex = 4;
+    private readonly int[] indexes = new int[4];
 
     private float shortestDistance = 0;
     private float biggestDifference = 0;
     private float leastAllies = 0;
 
-    [SerializeField] private float timeBetweenChecks = 3f;
     [SerializeField] private float emergencyDist = 3f;
     private void Update()
     {
-        checkTimer += Time.deltaTime;
-
         if (selectedPos < desiredIndex)
         {
             PosInput = 1;
@@ -34,16 +30,18 @@ public class AiController : PlayerController
 
         CheckPosInput();
         CheckSpawn();
+    }
 
-        if (checkTimer <= timeBetweenChecks)
-        {
-            return;
-        }
+    public override void OnUnitSpawn()
+    {
+        FindNewPosition();
+    }
+    private void FindNewPosition()
+    {
         shortestDistance = 0f;
         biggestDifference = 0f;
         shortestDistance = 0f;
         leastAllies = 0f;
-        checkTimer = 0f;
         lanes = manager.GetUnits();
 
         for (int i = 0; i < lanes.Length; i++)
@@ -86,5 +84,4 @@ public class AiController : PlayerController
         indexes[3] = Random.Range(0, lanes.Length);
         desiredIndex = indexes[Random.Range(0, indexes.Length)];
     }
-
 }

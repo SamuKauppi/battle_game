@@ -7,23 +7,14 @@ public class AnimEvents : MonoBehaviour
 {
     [SerializeField] private UnitController controller;
 
-
-    public void Attack(string attackParameter)
+    public void Attack(int i)
     {
-        string damage = "";
-        string type = "";
-        foreach (char s in attackParameter)
-        {
-            if (Char.IsDigit(s))
-            {
-                damage += s;
-            }
-            else
-            {
-                type += s;
-            }
-        }
-        controller.Attack(int.Parse(damage), type);
+        controller.Attack(i);
+    }
+
+    public void EndAttack()
+    {
+        controller.OnAttackEnd();
     }
 
     public void Death()

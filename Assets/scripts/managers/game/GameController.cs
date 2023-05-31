@@ -1,10 +1,10 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class GameController : MonoBehaviour
 {
@@ -38,8 +38,9 @@ public class GameController : MonoBehaviour
 
     public TargetInRange[] CheckEnemy(Vector3 thisPos, Vector3 attackRange, Vector3 stopRange, int alliance, int Xindex, int Zindex, int maxTargets)
     {
-        List<TargetInRange> allyInRange = new();
-        List<TargetInRange> enemiesInRange = new();
+        TargetInRange[] targets = new TargetInRange[maxTargets + 1];
+        bool allyFound = false;
+        int enemyIndex = 0;
 
         for (int i = lanes[Xindex].units.Count - 1; i >= 0; i--)
         {
@@ -52,8 +53,8 @@ public class GameController : MonoBehaviour
 
             if (Mathf.Abs(target.transform.position.z) > 12f)
             {
-                target.TakeDamage(target.hp * 10, "");
-                target.gameObject.SetActive(false);
+                target.TakeDamage(1000000, "");
+                lanes[Xindex].units.RemoveAt(i);
                 playerScores += target.Alliance;
                 scoreSlider.value = playerScores;
                 if (Mathf.Abs(playerScores) >= 10)
@@ -68,45 +69,55 @@ public class GameController : MonoBehaviour
             Vector3 forward = (attackRange - thisPos).normalized;
             float dot = Vector3.Dot(relativePos.normalized, forward);
             if (dot < 0)
-                continue; // Opponent unit is behind
+                continue; // target unit is behind
             else if (dot == 0)
             {
                 target.transform.position += forward * 0.05f;
+                continue; // target is on top of this
             }
 
-
-            bool inAttackRange = Vector3.Distance(thisPos, target.transform.position) < Vector3.Distance(thisPos, attackRange);
-            bool inStopRange = Vector3.Distance(thisPos, target.transform.position) < Vector3.Distance(thisPos, stopRange);
+            float distanceToTarget = Vector3.Distance(thisPos, target.transform.position);
+            bool inAttackRange = distanceToTarget < Vector3.Distance(thisPos, attackRange);
+            bool inStopRange = distanceToTarget < Vector3.Distance(thisPos, stopRange);
 
             if (alliance != target.Alliance)
             {
                 if (!inAttackRange)
                     continue; // enemy is too far from attacking range
 
-                enemiesInRange.Add(new TargetInRange(target, target.Alliance, inStopRange));
 
-                if (enemiesInRange.Count > maxTargets)
-                    break;
+                if (enemyIndex >= maxTargets)
+                {
+                    int shortestDistIdex = 0;
+                    float dist = distanceToTarget;
+                    for (int x = 1; x < targets.Length; x++)
+                    {
+                        if (targets[x].DistanceToTarget > dist)
+                        {
+                            shortestDistIdex = x;
+                            dist = targets[x].DistanceToTarget;
+                        }
+                    }
+                    if (shortestDistIdex != 0)
+                    {
+                        targets[shortestDistIdex] = new TargetInRange(target, target.Alliance, inStopRange, distanceToTarget);
+                    }
+                }
+                else
+                {
+                    enemyIndex++;
+                    targets[enemyIndex] = new TargetInRange(target, target.Alliance, inStopRange, distanceToTarget);
+                }
             }
             else
             {
-                if (!inStopRange || allyInRange.Count > 0)
+                if (!inStopRange || allyFound)
                     continue; // ally is too far from stopping range
-
-                allyInRange.Add(new TargetInRange(target, alliance, inStopRange));
+                targets[0] = new TargetInRange(target, alliance, inStopRange, distanceToTarget);
+                allyFound = true;
             }
-
-
         }
-
-        if (enemiesInRange.Count > 0)
-        {
-            return enemiesInRange.ToArray();
-        }
-        else
-        {
-            return allyInRange.ToArray();
-        }
+        return targets;
     }
 
     public Vector3 GetXPos(int index)

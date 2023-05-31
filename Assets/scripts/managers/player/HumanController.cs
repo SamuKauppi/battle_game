@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HumanController : PlayerController
 {
-    private void FixedUpdate()
+    private void Update()
     {
         if (Input.GetKey(KeyCode.UpArrow))
         {
@@ -19,7 +19,17 @@ public class HumanController : PlayerController
             PosInput = 0;
         }
 
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            UnitInput = -1;
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            UnitInput = 1;
+        }
+
         CheckPosInput();
+        CheckUnitInput();
         CheckSpawn();
     }
 }

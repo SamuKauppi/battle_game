@@ -1,19 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public abstract class PlayerController : MonoBehaviour
 {
     public Transform selector;
     public int selectedPos;
-    [SerializeField] private string selectedUnit;
+
+    [SerializeField] private UnitSpawn[] units;
+    [SerializeField] private int selectedUnit;
+
     public int alliance;
-    [SerializeField] private float spawnTime = 2f;
     private float spawnTimer;
     private float moveTimer;
-    public GameController manager;
+
     public int PosInput { get; set; }
     public int UnitInput { get; set; }
+
+    public GameController manager;
+    [SerializeField] private TMP_Text unitText;
 
     private void Start()
     {
@@ -24,6 +28,11 @@ public abstract class PlayerController : MonoBehaviour
     public void CheckPosInput()
     {
         moveTimer += Time.deltaTime;
+        UpdatePosition();
+    }
+
+    private void UpdatePosition()
+    {
         if (moveTimer < 0.15f)
             return;
 
@@ -31,7 +40,8 @@ public abstract class PlayerController : MonoBehaviour
         {
             moveTimer = 0f;
             selectedPos -= 1;
-            selectedPos = Mathf.Clamp(selectedPos, 0, 8);    
+            selectedPos = Mathf.Clamp(selectedPos, 0, 8);
+            OnInput(PosInput);
             PosInput = 0;
         }
         if (PosInput > 0)
@@ -39,19 +49,55 @@ public abstract class PlayerController : MonoBehaviour
             moveTimer = 0f;
             selectedPos += 1;
             selectedPos = Mathf.Clamp(selectedPos, 0, 8);
+            OnInput(PosInput);
             PosInput = 0;
         }
+
         selector.position = new Vector3(manager.GetXPos(selectedPos).x, 0, selector.transform.position.z);
+    }
+    public virtual void OnInput(int index)
+    {
+
+    }
+
+    public void CheckUnitInput()
+    {
+        if (UnitInput < 0)
+        {
+            selectedUnit -= 1;
+            if (selectedUnit < 0)
+            {
+                selectedUnit = units.Length - 1;
+            }
+            unitText.text = selectedUnit.ToString();
+            UnitInput = 0;
+        }
+        if (UnitInput > 0)
+        {
+            selectedUnit += 1;
+            if (selectedUnit >= units.Length)
+            {
+                selectedUnit = 0;
+            }
+            unitText.text = selectedUnit.ToString();
+            UnitInput = 0;
+        }
+
     }
 
     public void CheckSpawn()
     {
-        if (spawnTimer > spawnTime)
+        if (spawnTimer > units[selectedUnit].spawnTime)
         {
-            manager.AddUnit(alliance, selectedPos, selector.position, transform.rotation, selectedUnit);
+            manager.AddUnit(alliance, selectedPos, selector.position, transform.rotation, units[selectedUnit].unitName);
             spawnTimer = 0f;
+            OnUnitSpawn();
         }
         spawnTimer += Time.deltaTime;
     }
 
+    public virtual void OnUnitSpawn()
+    {
+
+    }
 }

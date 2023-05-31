@@ -7,5 +7,137 @@ AvatarMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: top
-  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000010000000100000001000000
-  m_Elements: []
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 1
+  - m_Path: Armature/foot.IK.L
+    m_Weight: 0
+  - m_Path: Armature/foot.IK.L/foot.IK.L_end
+    m_Weight: 0
+  - m_Path: Armature/foot.IK.R
+    m_Weight: 0
+  - m_Path: Armature/foot.IK.R/foot.IK.R_end
+    m_Weight: 0
+  - m_Path: Armature/head_control
+    m_Weight: 1
+  - m_Path: Armature/head_control/head_control_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/arm.IK.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/arm.IK.L/arm.IK.L_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/arm.IK.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/arm.IK.R/arm.IK.R_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hand.IK.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hand.IK.L/hand.IK.L_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hand.IK.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hand.IK.R/hand.IK.R_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.L
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.L/leg.L
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.L/leg.L/leg.L.001
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.L/leg.L/leg.L.001/foot.L
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.L/leg.L/leg.L.001/foot.L/foot.L_end
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.R
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.R/leg.R
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.R/leg.R/leg.R.001
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.R/leg.R/leg.R.001/foot.R
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/hip.R/leg.R/leg.R.001/foot.R/foot.R_end
+    m_Weight: 0
+  - m_Path: Armature/Hip?control/hip/spine
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/neck
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/neck/neck.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/neck/neck.001/head
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/neck/neck.001/head/head_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/fingers.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/fingers.L/fingers.L.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/fingers.L/fingers.L.001/fingers.L.001_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/palm.L.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/palm.L.001/thumb.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/palm.L.001/thumb.L/thumb.L.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/palm.L/palm.L.001/thumb.L/thumb.L.001/thumb.L.001_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/wrist.L
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.L/arm.L/arm.L.001/wrist.L/wrist.L_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/fingers.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/fingers.R/fingers.R.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/fingers.R/fingers.R.001/fingers.R.001_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/palm.R.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/palm.R.001/thumb.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/palm.R.001/thumb.R/thumb.R.001
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/palm.R/palm.R.001/thumb.R/thumb.R.001/thumb.R.001_end
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/wrist.R
+    m_Weight: 1
+  - m_Path: Armature/Hip?control/hip/spine/spine.001/chest/shoulder.R/arm.R/arm.R.001/wrist.R/wrist.R_end
+    m_Weight: 1
+  - m_Path: Armature/knee.IK.L
+    m_Weight: 1
+  - m_Path: Armature/knee.IK.L/knee.IK.L_end
+    m_Weight: 1
+  - m_Path: Armature/knee.IK.R
+    m_Weight: 1
+  - m_Path: Armature/knee.IK.R/knee.IK.R_end
+    m_Weight: 1
+  - m_Path: dude
+    m_Weight: 1
