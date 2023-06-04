@@ -7,9 +7,9 @@ public class AnimEvents : MonoBehaviour
 {
     [SerializeField] private UnitController controller;
 
-    public void Attack(int i)
+    public void Attack()
     {
-        controller.Attack(i);
+        controller.Attack();
     }
 
     public void EndAttack()

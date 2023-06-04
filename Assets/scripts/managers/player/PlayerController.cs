@@ -7,7 +7,7 @@ public abstract class PlayerController : MonoBehaviour
     public int selectedPos;
 
     [SerializeField] private UnitSpawn[] units;
-    [SerializeField] private int selectedUnit;
+    public int selectedUnit;
 
     public int alliance;
     private float spawnTimer;

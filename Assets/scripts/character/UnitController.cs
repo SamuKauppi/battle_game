@@ -8,55 +8,59 @@ public class UnitController : MonoBehaviour
 {
     // References
     private GameController manager;
-
-    // Animations
     [SerializeField] private Animator anim;
 
     // Stats
-    public float hp;
-    private float maxHp;
-    [SerializeField] private float damageMultiplier = 1;
-    [SerializeField] private float attack_range;
-    [SerializeField] private float stop_range;
+    public string UnitName;                             // Used for spawning
+    public float hp;                                    // Units hp
+    [SerializeField] private float damageMultiplier = 1;// Damage increase
+    [SerializeField] private float attack_range;        // How far can this unit attack
+    [SerializeField] private float stop_range;          // When the unit stops moving
+    [SerializeField] private int maxAttackTargets;      // How many targets can the unit attack at once
+    [SerializeField] private float speed;               // How fast does this unit move
 
     // Attaks
-    [SerializeField] private AttackType[] moveSet;
-    private float totalAttackSelect;
-    private bool animLayrWeight;
+    [SerializeField] private AttackType[] moveSet;      // Moves the unit uses
+    private float totalAttackSelectWeight;              // Used for selecting moves based on it's weight value
+    private int selectedAttackIndex = 0;                // Current attack selected
+    private bool animLayrWeight;                        // Used for tracking the weight of the top animation layer. When attacking = 1, otherwise = 0
 
     // Armor
+    private float maxHp;                                // Hp value used for resetting when dead
     [SerializeField] private float slashArmor = 10;
     [SerializeField] private float thrustArmor = 10;
     [SerializeField] private float bluntArmor = 10;
     [SerializeField] private float specialArmor = 10;
 
     // Targeting
-    [SerializeField] private TargetInRange[] targets;
-    [SerializeField] private int maxAttackTargets;
-    private float targetUpdateTmr;
+    [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
+    private float targetUpdateTmr;                      // Timer for limiting how often units check for targets
+    private const float targetUpdateThreshold = 0.1f;   // Threshold
 
-    // Movement
-    [SerializeField] private float speed;
-    private float movement;
-    private bool isKnocked;
-    public int Alliance { get; set; }
-    public int Xindex { get; set; }
-    public int Zindex { get; set; }
-    public bool IsAlive { get { return hp > 0; } set { if (maxHp > 0) { hp = maxHp; anim.SetFloat("walking_speed", movement); } } }
+    // Movement          
+    private float movement;                             // Normal movement speed of this unit
+    private float alteredMovement;                      // When this unit is faster than an ally in front of this, use their speed
+    private bool isKnocked;                             // Stops moving while being knocked back
+    public float GetSpeed { get { return speed; } }     // Return speed
+    public int Alliance { get; set; }                   // Alliance of this unit
+    public int Xindex { get; set; }                     // On which lane this unit is
+    public int Zindex { get; set; }                     // Each unit in lane gets a Zindex to identify it
+    public bool IsAlive { get { return hp > 0; } set { if (maxHp > 0) { hp = maxHp; } } } // Is this unit alive or set it alive
 
     private void Start()
     {
         manager = GameController.Instance;
         maxHp = hp;
-        movement = speed;  
+        movement = speed;
+        // Stop moving at the beginning
         SetMoving(false);
-        OnAttackEnd();
-
+        // Get a random move at the beginning 
+        OnAttackEnd();  
+        // Get the total weight of all of the movesets
         for (int i = 0; i < moveSet.Length; i++)
         {
-            totalAttackSelect += moveSet[i].selectWeight;
+            totalAttackSelectWeight += moveSet[i].selectWeight;
         }
-        IsAlive = true;
     }
 
     private void FixedUpdate()
@@ -64,31 +68,48 @@ public class UnitController : MonoBehaviour
         if (!IsAlive)
             return;
 
+        // Check targets
         targetUpdateTmr += Time.fixedDeltaTime;
-        if (targetUpdateTmr > 0.1f || targets.Length < 1)
+        if (targetUpdateTmr > targetUpdateThreshold)
         {
             targetUpdateTmr = 0;
             CheckTargetsFront();
         }
+
+        // Apply movement
         MoveForward();
     }
+
     public void SetMoving(bool value)
     {
         if (isKnocked)
+        {
+            anim.SetBool("walk", false);
+            speed = 0f;
             return;
+        }
+
 
         anim.SetBool("walk", value);
         if (value)
         {
-            speed = movement;
+            if (alteredMovement > 0)
+                speed = alteredMovement;
+            else
+                speed = movement;
+
+            anim.SetFloat("walking_speed", speed);
         }
         else
         {
-            speed = 0;
+            speed = 0f;
         }
     }
     private void MoveForward()
     {
+        if (isKnocked)
+            return;
+
         transform.position += speed * Time.fixedDeltaTime * transform.forward;
     }
 
@@ -113,6 +134,14 @@ public class UnitController : MonoBehaviour
             if (target.InStopRange)
             {
                 foundStopRangeTarget = true;
+                if (target.Alliance == Alliance && target.Target.GetSpeed < movement)
+                {
+                    alteredMovement = target.Target.GetSpeed;
+                }
+                else
+                {
+                    alteredMovement = 0;
+                }
             }
 
             if (target.Alliance != Alliance)
@@ -126,16 +155,14 @@ public class UnitController : MonoBehaviour
         else
             animLayrWeight = true;
 
+
         SetMoving(!foundStopRangeTarget);
         anim.SetBool("attack", foundEnemy);
     }
 
-    public void Attack(int attackIndex)
+    public void Attack()
     {
-        if (moveSet.Length <= attackIndex)
-            return;
-
-        AttackType attack = moveSet[attackIndex];
+        AttackType attack = moveSet[selectedAttackIndex];
         foreach (TargetInRange target in targets)
         {
             if (target == null)
@@ -152,11 +179,11 @@ public class UnitController : MonoBehaviour
     {
 
         // Generate a random value between 0 and the total weight
-        float randomValue = Random.Range(0f, totalAttackSelect);
+        float randomValue = Random.Range(0f, totalAttackSelectWeight);
 
         // Iterate through the attacks and find the one corresponding to the random value
         float cumulativeWeight = 0f;
-        int selectedAttackIndex = 0;
+        selectedAttackIndex = 0;
         foreach (var damageType in moveSet)
         {
             cumulativeWeight += damageType.selectWeight;
@@ -186,9 +213,10 @@ public class UnitController : MonoBehaviour
             "special" => GetDamageModifier(specialArmor),
             _ => GetDamageModifier(slashArmor),
         };
-        hp -= amount * Random.Range(0.80f, 1.21f) * multiplier;
+        float damage = amount * Random.Range(0.85f, 1.16f) * multiplier;
+        hp -= damage;
 
-        StartCoroutine(ApplyKnockBack(amount * 0.015f));
+        StartCoroutine(ApplyKnockBack(damage * 0.017f));
         if (hp <= 0)
         {
             anim.SetTrigger("die");
@@ -216,10 +244,10 @@ public class UnitController : MonoBehaviour
 
     public void OnDeath()
     {
-        targets = new TargetInRange[0];
         Xindex = -1;
         Zindex = -1;
         anim.SetLayerWeight(1, 0f);
+        alteredMovement = 0;
     }
 
     public void OnDespawn()

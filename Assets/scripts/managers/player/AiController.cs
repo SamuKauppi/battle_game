@@ -5,7 +5,8 @@ using UnityEngine;
 public class AiController : PlayerController
 {
     UnitsInLane[] lanes = null;
-    private int desiredIndex = 4;
+    private int desiredLaneIndex = 4;
+    [SerializeField] private int desiredUnitIndex = 0;
     private readonly int[] indexes = new int[4];
 
     private float shortestDistance = 0;
@@ -13,13 +14,14 @@ public class AiController : PlayerController
     private float leastAllies = 0;
 
     [SerializeField] private float emergencyDist = 3f;
+
     private void Update()
     {
-        if (selectedPos < desiredIndex)
+        if (selectedPos < desiredLaneIndex)
         {
             PosInput = 1;
         }
-        else if (selectedPos > desiredIndex)
+        else if (selectedPos > desiredLaneIndex)
         {
             PosInput = -1;
         }
@@ -28,7 +30,21 @@ public class AiController : PlayerController
             PosInput = 0;
         }
 
+        if (selectedUnit < desiredUnitIndex)
+        {
+            UnitInput = 1;
+        }
+        else if (selectedUnit > desiredUnitIndex)
+        {
+            UnitInput = -1;
+        }
+        else
+        {
+            UnitInput = 0;
+        }
+
         CheckPosInput();
+        CheckUnitInput();
         CheckSpawn();
     }
 
@@ -66,9 +82,10 @@ public class AiController : PlayerController
 
             if (shortestDistance < emergencyDist && enemies - allies > 0)
             {
-                desiredIndex = i;
+                desiredLaneIndex = i;
                 return;
             }
+
             if (biggestDifference < enemies - allies)
             {
                 biggestDifference = enemies - allies;
@@ -82,6 +99,29 @@ public class AiController : PlayerController
         }
 
         indexes[3] = Random.Range(0, lanes.Length);
-        desiredIndex = indexes[Random.Range(0, indexes.Length)];
+        desiredLaneIndex = indexes[Random.Range(0, indexes.Length)];
+        SelectNewUnit();
+    }
+
+    private void SelectNewUnit()
+    {
+        int spear = 0;
+        int sword = 0;
+
+        foreach (UnitController u in lanes[desiredLaneIndex].units)
+        {
+            if (u.UnitName.Equals("spear"))
+                spear++;
+            else
+                sword++;
+        }
+        if (spear >= sword)
+        {
+            desiredUnitIndex = 0;
+        }
+        else
+        {
+            desiredUnitIndex = 1;
+        }
     }
 }
