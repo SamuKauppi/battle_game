@@ -14,6 +14,7 @@ public class AiController : PlayerController
     private float leastAllies = 0;
 
     [SerializeField] private float emergencyDist = 3f;
+    private bool emergencyMode;
 
     private void Update()
     {
@@ -58,7 +59,7 @@ public class AiController : PlayerController
         biggestDifference = 0f;
         shortestDistance = 0f;
         leastAllies = 0f;
-        lanes = manager.GetUnits();
+        lanes = gameManager.GetLaneData();
 
         for (int i = 0; i < lanes.Length; i++)
         {
@@ -83,6 +84,8 @@ public class AiController : PlayerController
             if (shortestDistance < emergencyDist && enemies - allies > 0)
             {
                 desiredLaneIndex = i;
+                SelectNewUnit();
+                emergencyMode = true;
                 return;
             }
 
@@ -100,6 +103,7 @@ public class AiController : PlayerController
 
         indexes[3] = Random.Range(0, lanes.Length);
         desiredLaneIndex = indexes[Random.Range(0, indexes.Length)];
+        emergencyMode = false;
         SelectNewUnit();
     }
 
@@ -115,13 +119,29 @@ public class AiController : PlayerController
             else
                 sword++;
         }
-        if (spear >= sword)
+        if (spear > sword)
         {
-            desiredUnitIndex = 0;
+            desiredUnitIndex = 1;
+        }
+        else if (spear < sword)
+        {
+            desiredUnitIndex = 2;
         }
         else
         {
-            desiredUnitIndex = 1;
+            desiredUnitIndex = 0;
+        }
+
+        if (emergencyMode)
+        {
+            if(desiredUnitIndex == 0)
+            {
+                desiredUnitIndex = 1;
+            }
+            else
+            {
+                desiredUnitIndex = 0;
+            }
         }
     }
 }

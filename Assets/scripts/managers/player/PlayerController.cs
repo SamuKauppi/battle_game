@@ -6,6 +6,8 @@ public abstract class PlayerController : MonoBehaviour
     public Transform selector;
     public int selectedPos;
 
+    int lanesLength;
+    [SerializeField] private string[] unitNames;
     [SerializeField] private UnitSpawn[] units;
     public int selectedUnit;
 
@@ -16,13 +18,19 @@ public abstract class PlayerController : MonoBehaviour
     public int PosInput { get; set; }
     public int UnitInput { get; set; }
 
-    public GameController manager;
-    [SerializeField] private TMP_Text unitText;
+    public GameController gameManager;
+    public SpawnHudController spawnManager;
+    [SerializeField] private int playerIndex;
+    
+    private bool toggleSpawn = false;
 
     private void Start()
     {
-        manager = GameController.Instance;
+        gameManager = GameController.Instance;
+        spawnManager = SpawnHudController.instance;
+        units = spawnManager.GetUnits(unitNames, playerIndex);
         PosInput = 0;
+        lanesLength = gameManager.GetLaneData().Length - 1;
     }
 
     public void CheckPosInput()
@@ -40,7 +48,7 @@ public abstract class PlayerController : MonoBehaviour
         {
             moveTimer = 0f;
             selectedPos -= 1;
-            selectedPos = Mathf.Clamp(selectedPos, 0, 8);
+            selectedPos = Mathf.Clamp(selectedPos, 0, lanesLength);
             OnInput(PosInput);
             PosInput = 0;
         }
@@ -48,16 +56,12 @@ public abstract class PlayerController : MonoBehaviour
         {
             moveTimer = 0f;
             selectedPos += 1;
-            selectedPos = Mathf.Clamp(selectedPos, 0, 8);
+            selectedPos = Mathf.Clamp(selectedPos, 0, lanesLength);
             OnInput(PosInput);
             PosInput = 0;
         }
 
-        selector.position = new Vector3(manager.GetXPos(selectedPos).x, 0, selector.transform.position.z);
-    }
-    public virtual void OnInput(int index)
-    {
-
+        selector.position = new Vector3(gameManager.GetXPos(selectedPos).x, 0, selector.transform.position.z);
     }
 
     public void CheckUnitInput()
@@ -69,7 +73,6 @@ public abstract class PlayerController : MonoBehaviour
             {
                 selectedUnit = units.Length - 1;
             }
-            unitText.text = selectedUnit.ToString();
             UnitInput = 0;
         }
         if (UnitInput > 0)
@@ -79,25 +82,43 @@ public abstract class PlayerController : MonoBehaviour
             {
                 selectedUnit = 0;
             }
-            unitText.text = selectedUnit.ToString();
             UnitInput = 0;
         }
 
+        spawnManager.MoveSelector(playerIndex, units[selectedUnit].rectPosition);
     }
 
     public void CheckSpawn()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            toggleSpawn = !toggleSpawn;
+        }
+
+        if (toggleSpawn)
+            return;
+
         if (spawnTimer > units[selectedUnit].spawnTime)
         {
-            manager.AddUnit(alliance, selectedPos, selector.position, transform.rotation, units[selectedUnit].unitName);
+            gameManager.AddUnit(alliance, selectedPos, selector.position, transform.rotation, units[selectedUnit].unitName);
             spawnTimer = 0f;
             OnUnitSpawn();
         }
         spawnTimer += Time.deltaTime;
+
+        for (int i = 0; i < units.Length; i++)
+        {
+            units[i].pickSlider.value = spawnTimer;
+        }
     }
 
     public virtual void OnUnitSpawn()
     {
 
     }
+    public virtual void OnInput(int index)
+    {
+
+    }
+
 }

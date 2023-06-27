@@ -12,6 +12,10 @@ public class AnimEvents : MonoBehaviour
         controller.Attack();
     }
 
+    //public void StartAttack()
+    //{
+    //    controller.OnAttackStart();
+    //}
     public void EndAttack()
     {
         controller.OnAttackEnd();

@@ -15,15 +15,19 @@ public class UnitController : MonoBehaviour
     public float hp;                                    // Units hp
     [SerializeField] private float damageMultiplier = 1;// Damage increase
     [SerializeField] private float attack_range;        // How far can this unit attack
+    [SerializeField] private float attack_speed;        // Delay time between attacks
+    private float attack_timer;
     [SerializeField] private float stop_range;          // When the unit stops moving
-    [SerializeField] private int maxAttackTargets;      // How many targets can the unit attack at once
     [SerializeField] private float speed;               // How fast does this unit move
 
     // Attaks
+    [SerializeField] private int selectedAttackIndex;   // Current attack selected
+    [SerializeField] private bool randomIndexAtStart;   // Should the unit start with random attack
+    private int startingAttackIndex;                    // If the starting attack is not random, then save the starting index
     [SerializeField] private AttackType[] moveSet;      // Moves the unit uses
     private float totalAttackSelectWeight;              // Used for selecting moves based on it's weight value
-    private int selectedAttackIndex = 0;                // Current attack selected
     private bool animLayrWeight;                        // Used for tracking the weight of the top animation layer. When attacking = 1, otherwise = 0
+    private bool shouldAttack;                          // Should the unit be attacking
 
     // Armor
     private float maxHp;                                // Hp value used for resetting when dead
@@ -34,6 +38,7 @@ public class UnitController : MonoBehaviour
 
     // Targeting
     [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
+    private float distanceToClosestEnemy;               // Distance to the closest target
     private float targetUpdateTmr;                      // Timer for limiting how often units check for targets
     private const float targetUpdateThreshold = 0.1f;   // Threshold
 
@@ -54,12 +59,15 @@ public class UnitController : MonoBehaviour
         movement = speed;
         // Stop moving at the beginning
         SetMoving(false);
-        // Get a random move at the beginning 
-        OnAttackEnd();  
+        // Set attack index to random index or to a specific index
+        startingAttackIndex = selectedAttackIndex;
+        SetAttack();
         // Get the total weight of all of the movesets
         for (int i = 0; i < moveSet.Length; i++)
         {
             totalAttackSelectWeight += moveSet[i].selectWeight;
+            moveSet[i].minSelectWeightRange = totalAttackSelectWeight - moveSet[i].selectWeight;
+            moveSet[i].maxSelectWeightRange = totalAttackSelectWeight;
         }
     }
 
@@ -75,6 +83,22 @@ public class UnitController : MonoBehaviour
             targetUpdateTmr = 0;
             CheckTargetsFront();
         }
+
+        attack_timer += Time.fixedDeltaTime;
+        // Attack if possible
+        if (shouldAttack)
+        {
+            if (attack_timer > attack_speed)
+            {
+                anim.SetBool("attack", true);
+                attack_timer = 0f;
+            }
+            else
+            {
+                anim.SetBool("attack", false);
+            }
+        }
+
 
         // Apply movement
         MoveForward();
@@ -121,10 +145,11 @@ public class UnitController : MonoBehaviour
             Alliance,
             Xindex,
             Zindex,
-            maxAttackTargets);
+            moveSet[selectedAttackIndex].maxTargets);
 
         bool foundStopRangeTarget = false;
         bool foundEnemy = false;
+        distanceToClosestEnemy = 0;
 
         foreach (TargetInRange target in targets)
         {
@@ -147,19 +172,47 @@ public class UnitController : MonoBehaviour
             if (target.Alliance != Alliance)
             {
                 foundEnemy = true;
+                if (distanceToClosestEnemy > target.DistanceToTarget || distanceToClosestEnemy == 0)
+                {
+                    distanceToClosestEnemy = target.DistanceToTarget;
+                }
             }
         }
 
         if (foundEnemy)
             anim.SetLayerWeight(1, 1f);
         else
+        {
             animLayrWeight = true;
+            distanceToClosestEnemy = attack_range;
+        }
 
 
-        SetMoving(!foundStopRangeTarget);
-        anim.SetBool("attack", foundEnemy);
+        if (!moveSet[selectedAttackIndex].stopMovement)
+        {
+            SetMoving(!foundStopRangeTarget);
+        }
+        else
+        {
+            if (!foundEnemy)
+            {
+                SetMoving(!foundStopRangeTarget);
+            }
+            else
+            {
+                SetMoving(false);
+            }
+        }
+
+        shouldAttack = foundEnemy;
     }
-
+    //public void OnAttackStart()
+    //{
+    //    if (moveSet[selectedAttackIndex].stopMovement)
+    //    {
+    //        SetMoving(false);
+    //    }
+    //}
     public void Attack()
     {
         AttackType attack = moveSet[selectedAttackIndex];
@@ -177,22 +230,37 @@ public class UnitController : MonoBehaviour
 
     public void OnAttackEnd()
     {
-
+        attack_timer = 0f;
+        anim.SetBool("attack", false);
         // Generate a random value between 0 and the total weight
         float randomValue = Random.Range(0f, totalAttackSelectWeight);
 
-        // Iterate through the attacks and find the one corresponding to the random value
-        float cumulativeWeight = 0f;
-        selectedAttackIndex = 0;
-        foreach (var damageType in moveSet)
+        bool hasSelected = false;
+        for (int i = 0; i < moveSet.Length; i++)
         {
-            cumulativeWeight += damageType.selectWeight;
-            if (randomValue <= cumulativeWeight)
+            if (distanceToClosestEnemy > moveSet[i].maxRange || distanceToClosestEnemy < moveSet[i].minRange)
             {
+                continue;
+            }
+
+            if (!hasSelected)
+            {
+                hasSelected = true;
+                selectedAttackIndex = i;
+                continue;
+            }
+
+            if (randomValue <= moveSet[i].maxSelectWeightRange && randomValue >= moveSet[i].minSelectWeightRange)
+            {
+                selectedAttackIndex = i;
                 break;
             }
-            selectedAttackIndex++;
         }
+
+        //if (UnitName.Equals("spear") && Alliance == 1)
+        //{
+        //    Debug.Log(selectedAttackIndex + ", " + distanceToClosestEnemy + ", " + hasSelected);
+        //}
 
         // Set the selected attack index in the animator
         anim.SetFloat("attackType", selectedAttackIndex);
@@ -201,6 +269,24 @@ public class UnitController : MonoBehaviour
         {
             animLayrWeight = false;
             anim.SetLayerWeight(1, 0f);
+        }
+
+        if (moveSet[selectedAttackIndex].stopMovement)
+        {
+            SetMoving(true);
+        }
+    }
+
+    private void SetAttack()
+    {
+        if (randomIndexAtStart)
+        {
+            OnAttackEnd();
+        }
+        else
+        {
+            selectedAttackIndex = startingAttackIndex;
+            anim.SetFloat("attackType", selectedAttackIndex);
         }
     }
 
@@ -248,6 +334,7 @@ public class UnitController : MonoBehaviour
         Zindex = -1;
         anim.SetLayerWeight(1, 0f);
         alteredMovement = 0;
+        SetAttack();
     }
 
     public void OnDespawn()

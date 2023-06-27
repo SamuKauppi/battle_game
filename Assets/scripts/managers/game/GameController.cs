@@ -112,7 +112,7 @@ public class GameController : MonoBehaviour
             else
             {
                 if (!inStopRange || allyFound)
-                    continue; // ally is too far from stopping range
+                    continue; // ally is too far from stopping range or an ally has already been found
                 targets[0] = new TargetInRange(target, alliance, inStopRange, distanceToTarget);
                 allyFound = true;
             }
@@ -125,7 +125,7 @@ public class GameController : MonoBehaviour
         return lanes[index].xPos.position;
     }
 
-    public UnitsInLane[] GetUnits()
+    public UnitsInLane[] GetLaneData()
     {
         return lanes;
     }
