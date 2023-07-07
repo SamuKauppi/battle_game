@@ -25,7 +25,7 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
-    public GameObject GetPooledObject(string ident)
+    public GameObject GetPooledObject(string ident, Vector3 pos = new Vector3())
     {
         if (!objectPool.ContainsKey(ident)) return null;
 
@@ -35,6 +35,7 @@ public class ObjectPooler : MonoBehaviour
             {
                 objectToCheck = objectPool[ident].Dequeue();
                 objectToCheck.SetActive(true);
+                objectToCheck.transform.position = pos;
                 objectPool[ident].Enqueue(objectToCheck);
                 return objectToCheck;
             }
@@ -46,6 +47,7 @@ public class ObjectPooler : MonoBehaviour
             {
                 objectToCheck = Instantiate(objectsToBePooled[i].obj, objectsToBePooled[i].parent);
                 objectToCheck.SetActive(true);
+                objectToCheck.transform.position = pos;
                 objectPool[ident].Enqueue(objectToCheck);
                 return objectToCheck;
             }

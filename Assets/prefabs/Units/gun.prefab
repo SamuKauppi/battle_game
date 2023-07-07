@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8241671289297422611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7083287388960288975}
+  m_Layer: 0
+  m_Name: gunPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7083287388960288975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8241671289297422611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3331445128555312067}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3004203097749967912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63,12 +94,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: edc10733d70798642b44bae4522e8032, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f29c857a6d306704c9ac7e8c7f3dc023, type: 2}
     - target: {fileID: 919132149155446097, guid: edc10733d70798642b44bae4522e8032, type: 3}
       propertyPath: m_Name
       value: gun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edc10733d70798642b44bae4522e8032, type: 3}
+--- !u!1 &2697791541523442041 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: edc10733d70798642b44bae4522e8032, type: 3}
+  m_PrefabInstance: {fileID: 3004203097749967912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3244996072462152107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2697791541523442041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226ab5f0fd5688048b585b5c77a19aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pivotPoint: {fileID: 7083287388960288975}
+  lazer_speed: 2
+--- !u!4 &3331445128555312067 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: edc10733d70798642b44bae4522e8032, type: 3}
+  m_PrefabInstance: {fileID: 3004203097749967912}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5646497106350440734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85,9 +144,17 @@ PrefabInstance:
       value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: gun
+      value: 
+      objectReference: {fileID: 3244996072462152107}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: speed
       value: 1.05
       objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: myRend
+      value: 
+      objectReference: {fileID: 5240793485351875613}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: UnitName
       value: gun
@@ -114,7 +181,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: specialArmor
-      value: 20
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: useProjectile
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: maxAttackTargets
@@ -142,11 +213,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].attackType
-      value: thrust
+      value: special
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[1].attackType
-      value: thrust
+      value: special
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].selectWeight
@@ -212,8 +283,23 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3cecc44934d503146982517a33fedb2c, type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 7352721248872449082, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7649724369440196221, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7920593496683651855, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+    - {fileID: 4986132798509453198, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+--- !u!137 &5240793485351875613 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 497483776350123267, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 5646497106350440734}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8482484458176293757 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317744364535458403, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}

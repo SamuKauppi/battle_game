@@ -4,17 +4,24 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Controls an unit
+/// </summary>
 public class UnitController : MonoBehaviour
 {
     // References
     private GameController manager;
+    private ObjectPooler pooler;
     [SerializeField] private Animator anim;
+    public Renderer myRend;
+    [SerializeField] private LazerGun gun;
 
     // Stats
     public string UnitName;                             // Used for spawning
     public float hp;                                    // Units hp
     [SerializeField] private float damageMultiplier = 1;// Damage increase
     [SerializeField] private float attack_range;        // How far can this unit attack
+    [SerializeField] private bool useProjectile;        // Does this unit shoot projectiles
     [SerializeField] private float attack_speed;        // Delay time between attacks
     private float attack_timer;
     [SerializeField] private float stop_range;          // When the unit stops moving
@@ -26,7 +33,7 @@ public class UnitController : MonoBehaviour
     private int startingAttackIndex;                    // If the starting attack is not random, then save the starting index
     [SerializeField] private AttackType[] moveSet;      // Moves the unit uses
     private float totalAttackSelectWeight;              // Used for selecting moves based on it's weight value
-    private bool animLayrWeight;                        // Used for tracking the weight of the top animation layer. When attacking = 1, otherwise = 0
+    private bool disableTopLayer;                       // This prevents top animation layer to be turned off before an attack animation ends
     private bool shouldAttack;                          // Should the unit be attacking
 
     // Armor
@@ -38,6 +45,7 @@ public class UnitController : MonoBehaviour
 
     // Targeting
     [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
+    private UnitController followTarget;                // Target this unit is matching it's speed
     private float distanceToClosestEnemy;               // Distance to the closest target
     private float targetUpdateTmr;                      // Timer for limiting how often units check for targets
     private const float targetUpdateThreshold = 0.1f;   // Threshold
@@ -47,6 +55,7 @@ public class UnitController : MonoBehaviour
     private float alteredMovement;                      // When this unit is faster than an ally in front of this, use their speed
     private bool isKnocked;                             // Stops moving while being knocked back
     public float GetSpeed { get { return speed; } }     // Return speed
+    public float GetMovement { get { return movement; } }
     public int Alliance { get; set; }                   // Alliance of this unit
     public int Xindex { get; set; }                     // On which lane this unit is
     public int Zindex { get; set; }                     // Each unit in lane gets a Zindex to identify it
@@ -55,6 +64,7 @@ public class UnitController : MonoBehaviour
     private void Start()
     {
         manager = GameController.Instance;
+        pooler = ObjectPooler.Instance;
         maxHp = hp;
         movement = speed;
         // Stop moving at the beginning
@@ -73,6 +83,7 @@ public class UnitController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Do only if this unit is alive
         if (!IsAlive)
             return;
 
@@ -84,6 +95,8 @@ public class UnitController : MonoBehaviour
             CheckTargetsFront();
         }
 
+
+        // Increase attack timer
         attack_timer += Time.fixedDeltaTime;
         // Attack if possible
         if (shouldAttack)
@@ -104,8 +117,13 @@ public class UnitController : MonoBehaviour
         MoveForward();
     }
 
+    /// <summary>
+    ///  Sets unit's movement
+    /// </summary>
+    /// <param name="value"> Start or Stop moving </param>
     public void SetMoving(bool value)
     {
+        // If this unit is being knocked back, stop walk animation
         if (isKnocked)
         {
             anim.SetBool("walk", false);
@@ -113,10 +131,11 @@ public class UnitController : MonoBehaviour
             return;
         }
 
-
+        // Set walk animation and it's speed based on the movement
         anim.SetBool("walk", value);
         if (value)
         {
+            // Altered movement is based on the ally in front of this unit if it's slower
             if (alteredMovement > 0)
                 speed = alteredMovement;
             else
@@ -129,16 +148,26 @@ public class UnitController : MonoBehaviour
             speed = 0f;
         }
     }
+
+    /// <summary>
+    ///  Moves unit forward
+    /// </summary>
     private void MoveForward()
     {
+        // move forward if it's not being knocked back
         if (isKnocked)
             return;
 
         transform.position += speed * Time.fixedDeltaTime * transform.forward;
     }
 
+    /// <summary>
+    /// Called when checking for targets
+    /// </summary>
     private void CheckTargetsFront()
     {
+        // Returns an array of units in front of this unit
+        // This arrays length is maxtargets + 1 and the first value will be ally or null
         targets = manager.CheckEnemy(transform.position,
             transform.position + transform.forward * attack_range,
             transform.position + transform.forward * stop_range,
@@ -147,18 +176,32 @@ public class UnitController : MonoBehaviour
             Zindex,
             moveSet[selectedAttackIndex].maxTargets);
 
+        // Iterate through targets found
         bool foundStopRangeTarget = false;
         bool foundEnemy = false;
         distanceToClosestEnemy = 0;
-
         foreach (TargetInRange target in targets)
         {
             if (target == null)
                 continue;
 
+
+            // If it's an enemy save it as closest enemy for other functions
+            if (target.Alliance != Alliance)
+            {
+                foundEnemy = true;
+                if (distanceToClosestEnemy > target.DistanceToTarget || distanceToClosestEnemy == 0)
+                {
+                    distanceToClosestEnemy = target.DistanceToTarget;
+                }
+            }
+
+            // If the target is in stop range and is an ally that is slower, slow this unit to macth that unit
             if (target.InStopRange)
             {
                 foundStopRangeTarget = true;
+                followTarget = target.Target;
+
                 if (target.Alliance == Alliance && target.Target.GetSpeed < movement)
                 {
                     alteredMovement = target.Target.GetSpeed;
@@ -168,32 +211,36 @@ public class UnitController : MonoBehaviour
                     alteredMovement = 0;
                 }
             }
+        }
 
-            if (target.Alliance != Alliance)
+        if (!foundStopRangeTarget && followTarget != null)
+        {
+            if (!followTarget.IsAlive)
             {
-                foundEnemy = true;
-                if (distanceToClosestEnemy > target.DistanceToTarget || distanceToClosestEnemy == 0)
-                {
-                    distanceToClosestEnemy = target.DistanceToTarget;
-                }
+                alteredMovement = 0f;
+                followTarget = null;
             }
         }
 
+        // If an enemy was found, set the layer weight in top layer to 1. This let's the top part of the rig to attack
         if (foundEnemy)
             anim.SetLayerWeight(1, 1f);
         else
         {
-            animLayrWeight = true;
+            // If no enemies where found, then set disableTopLayer true to disable top layer after next attack
+            disableTopLayer = true;
+            // Distance to closest enemy will be changed to max range to pick correct attack
             distanceToClosestEnemy = attack_range;
         }
 
-
+        // Stop movement if the current attack is set so
         if (!moveSet[selectedAttackIndex].stopMovement)
         {
             SetMoving(!foundStopRangeTarget);
         }
         else
         {
+            // Otherwise stop movement when there is an target in stop range
             if (!foundEnemy)
             {
                 SetMoving(!foundStopRangeTarget);
@@ -213,8 +260,13 @@ public class UnitController : MonoBehaviour
     //        SetMoving(false);
     //    }
     //}
+
+    /// <summary>
+    ///  Called when an attack connects
+    /// </summary>
     public void Attack()
     {
+        // Iterate through targets with the current attack and apply damage
         AttackType attack = moveSet[selectedAttackIndex];
         foreach (TargetInRange target in targets)
         {
@@ -223,18 +275,48 @@ public class UnitController : MonoBehaviour
 
             if (target.Alliance != Alliance)
             {
-                target.Target.TakeDamage(attack.damage * damageMultiplier, attack.attackType);
+                if (useProjectile) // Check if it's a ranged unit with a projectile. Create projectile and apply damage in delay
+                {
+
+                    float projectileTravelTime = target.DistanceToTarget / gun.lazer_speed;
+                    gun.ShootGun(target.Target.transform.position);
+                    StartCoroutine(AttackWithDelay(target, attack, projectileTravelTime));
+                }
+                else
+                {
+                    target.Target.TakeDamage(attack.damage * damageMultiplier, attack.attackType);
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Projectile attack delay
+    /// </summary>
+    /// <param name="target"> Who takes damage </param>
+    /// <param name="attack"> The attack </param>
+    /// <param name="delay"> How long the attack will be delayed </param>
+    /// <returns></returns>
+    private IEnumerator AttackWithDelay(TargetInRange target, AttackType attack, float delay)
+    {
+        yield return new WaitForSeconds(delay); // Delay based on the projectile travel time
+        target.Target.TakeDamage(attack.damage * damageMultiplier, attack.attackType);
+    }
+
+    /// <summary>
+    /// Called after an attack ends
+    /// </summary>
     public void OnAttackEnd()
     {
+        // Reset attack timer
         attack_timer = 0f;
         anim.SetBool("attack", false);
+
         // Generate a random value between 0 and the total weight
         float randomValue = Random.Range(0f, totalAttackSelectWeight);
 
+        // Iterate through attacks to pick a new attack
+        // Pick a random attack that has valid range (inside min and max range), picking the first valid target as default
         bool hasSelected = false;
         for (int i = 0; i < moveSet.Length; i++)
         {
@@ -265,22 +347,29 @@ public class UnitController : MonoBehaviour
         // Set the selected attack index in the animator
         anim.SetFloat("attackType", selectedAttackIndex);
 
-        if (animLayrWeight)
+        // Now disable top layer after attack ends and there are no targets in front of this unit
+        if (disableTopLayer)
         {
-            animLayrWeight = false;
+            disableTopLayer = false;
             anim.SetLayerWeight(1, 0f);
+            SetAttack();
         }
 
+        // Stop movement if nessesary
         if (moveSet[selectedAttackIndex].stopMovement)
         {
             SetMoving(true);
         }
     }
 
+    /// <summary>
+    /// Sets the next attack to a random attack or to a specific if this unit will attack first with some attack
+    /// </summary>
     private void SetAttack()
     {
         if (randomIndexAtStart)
         {
+            distanceToClosestEnemy = attack_range;
             OnAttackEnd();
         }
         else
@@ -290,8 +379,17 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This unit takes damage
+    /// </summary>
+    /// <param name="amount"> damage </param>
+    /// <param name="damageType"> type </param>
     public void TakeDamage(float amount, string damageType)
     {
+        if (!IsAlive)
+            return;
+
+        // Get the multiplier for this attack type
         var multiplier = damageType switch
         {
             "thurst" => GetDamageModifier(thrustArmor),
@@ -299,21 +397,37 @@ public class UnitController : MonoBehaviour
             "special" => GetDamageModifier(specialArmor),
             _ => GetDamageModifier(slashArmor),
         };
+        // Calculate damage and take damage
         float damage = amount * Random.Range(0.85f, 1.16f) * multiplier;
         hp -= damage;
 
+        pooler.GetPooledObject("sparks", transform.position);
+
+        // Apply knockback
         StartCoroutine(ApplyKnockBack(damage * 0.017f));
+
+        // Is this units hp falls below 0, it dies
         if (hp <= 0)
         {
             anim.SetTrigger("die");
             SetMoving(false);
         }
     }
+    /// <summary>
+    /// Calculates damage multiplier
+    /// </summary>
+    /// <param name="armorValue"> armor value </param>
+    /// <returns></returns>
     private float GetDamageModifier(float armorValue)
     {
         return 1 - (armorValue / (40 + Mathf.Abs(armorValue)));
     }
 
+    /// <summary>
+    /// Applies knockback
+    /// </summary>
+    /// <param name="amount"> Knockback strength </param>
+    /// <returns></returns>
     IEnumerator ApplyKnockBack(float amount)
     {
         SetMoving(false);
@@ -328,6 +442,9 @@ public class UnitController : MonoBehaviour
         isKnocked = false;
     }
 
+    /// <summary>
+    /// On the first frame of death animation
+    /// </summary>
     public void OnDeath()
     {
         Xindex = -1;
@@ -335,8 +452,12 @@ public class UnitController : MonoBehaviour
         anim.SetLayerWeight(1, 0f);
         alteredMovement = 0;
         SetAttack();
+        pooler.GetPooledObject("explosion", transform.position);
     }
 
+    /// <summary>
+    /// On death animation end
+    /// </summary>
     public void OnDespawn()
     {
         anim.SetTrigger("live");

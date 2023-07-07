@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9f6384ec38652df4198d9bf021eb5632, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f29c857a6d306704c9ac7e8c7f3dc023, type: 2}
     - target: {fileID: 919132149155446097, guid: 9f6384ec38652df4198d9bf021eb5632, type: 3}
       propertyPath: m_Name
       value: mace
@@ -132,6 +136,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ae384dcb8e1496c41bee89c33c059866, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f29c857a6d306704c9ac7e8c7f3dc023, type: 2}
     - target: {fileID: 919132149155446097, guid: ae384dcb8e1496c41bee89c33c059866, type: 3}
       propertyPath: m_Name
       value: shield
@@ -145,6 +153,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5196082679474744008, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320720, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: m_Name
       value: mace
@@ -158,20 +170,24 @@ PrefabInstance:
       value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: myRend
+      value: 
+      objectReference: {fileID: 4185234995671652550}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: UnitName
       value: mace
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: bluntArmor
-      value: 42
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: slashArmor
-      value: 10
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: thrustArmor
-      value: 62
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: attack_speed
@@ -289,8 +305,19 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 7bba85ffde6ff7d408324ecad2b92e83, type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 7649724369440196221, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7920593496683651855, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+    - {fileID: 497483776350123267, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+--- !u!137 &4185234995671652550 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4986132798509453198, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 9162217548825909064}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4957629548252036395 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317744364535458403, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}

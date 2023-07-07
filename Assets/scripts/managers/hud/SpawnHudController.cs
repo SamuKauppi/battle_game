@@ -9,6 +9,7 @@ public class SpawnHudController : MonoBehaviour
 
     [SerializeField] private UnitSpawn[] avaiableUnits;
     [SerializeField] private UnitSelectionBoxes[] selectionBoxes;
+    [SerializeField] private Sprite[] LogoSprites;
 
     private void Awake()
     {
@@ -25,10 +26,12 @@ public class SpawnHudController : MonoBehaviour
             {
                 if (avaiableUnits[j].unitName.Equals(names[i]))
                 {
-                    UnitSpawn unit = new();
-                    unit.unitName = avaiableUnits[j].unitName;
-                    unit.spawnTime = avaiableUnits[j].spawnTime;
-                    unit.pickSlider = selectionBoxes[playerIndex].slidersObjs[asginedSlidercount];
+                    UnitSpawn unit = new()
+                    {
+                        unitName = avaiableUnits[j].unitName,
+                        spawnTime = avaiableUnits[j].spawnTime,
+                        pickSlider = selectionBoxes[playerIndex].slidersObjs[asginedSlidercount]
+                    };
                     unit.pickSlider.maxValue = avaiableUnits[j].spawnTime;
                     unit.pickSlider.value = avaiableUnits[j].spawnTime;
                     unit.pickSlider.gameObject.SetActive(true);
@@ -50,5 +53,10 @@ public class SpawnHudController : MonoBehaviour
     public void MoveSelector(int playerIndex, RectTransform pos)
     {
         selectionBoxes[playerIndex].selector.rectTransform.position = pos.position;
+    }
+
+    public void SetPlayerLogo(int playerIndex, int logoIndex)
+    {
+        selectionBoxes[playerIndex].logo.sprite = LogoSprites[logoIndex];
     }
 }

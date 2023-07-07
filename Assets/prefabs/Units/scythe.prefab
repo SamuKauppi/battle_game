@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5196082679474744008, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320720, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: m_Name
       value: scythe
@@ -17,15 +21,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: speed
-      value: 0.8
+      value: 0.72
       objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: myRend
+      value: 
+      objectReference: {fileID: 5282885103287262519}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: UnitName
       value: scythe
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: bluntArmor
-      value: 40
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: slashArmor
@@ -45,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: specialArmor
-      value: 60
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.size
@@ -81,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[1].minRange
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[2].maxRange
@@ -125,7 +133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[2].selectWeight
-      value: 10
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: moveSet.Array.data[2].stopMovement
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320723, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: m_RootOrder
@@ -175,11 +187,26 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: d4cb62af8c7e19f488a697f3de5af500, type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 7352721248872449082, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7649724369440196221, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7920593496683651855, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+    - {fileID: 497483776350123267, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
 --- !u!4 &4001849322892425434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317744364535458403, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 892514674471817913}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5282885103287262519 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4986132798509453198, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_PrefabInstance: {fileID: 892514674471817913}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8597579933204772736
@@ -245,6 +272,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 23b7b36666ea186478d0ba7a1af09114, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f29c857a6d306704c9ac7e8c7f3dc023, type: 2}
     - target: {fileID: 919132149155446097, guid: 23b7b36666ea186478d0ba7a1af09114, type: 3}
       propertyPath: m_Name
       value: scythe
