@@ -3,8 +3,9 @@ using UnityEngine;
 public abstract class PlayerDataTransferClass
 {
     public int Alliance;
+    public int slotIndex;
     public int logoIndex;
-    public Color BaseColor;
+    public Color mainColor;
     public Color detailColor;
     public Color highlightColor;
     public string[] units;

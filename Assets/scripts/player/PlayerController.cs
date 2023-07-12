@@ -8,7 +8,7 @@ public abstract class PlayerController : MonoBehaviour
     // References
     public GameController gameManager;
     public SpawnHudController spawnManager;
-    public MaterialManager matManager;
+    public MaterialManager MatManager { get; set; }
 
     // Lane Selection
     public Transform selector;
@@ -35,7 +35,7 @@ public abstract class PlayerController : MonoBehaviour
     private Color DetailColor { get; set; }     // Detail color of the team
     private Color HighlightColor { get; set; }  // Highlight color of the team
 
-    public void SetPlayerProperties(int alliance, int playerindex, int logoIndex, Color baseC, Color detailC, Color highC, string[] units)
+    public void SetPlayerProperties(int alliance, int playerindex, int logoIndex, Color baseC, Color detailC, Color highC, string[] units, MaterialManager matManager)
     {
         Alliance = alliance;
         PlayerIndex = playerindex;
@@ -44,13 +44,15 @@ public abstract class PlayerController : MonoBehaviour
         DetailColor = detailC;
         HighlightColor = highC;
         UnitNames = units;
+        MatManager = matManager;
     }
 
     private void Start()
     {
         gameManager = GameController.Instance;
         spawnManager = SpawnHudController.instance;
-        roboMaterial = matManager.CreateTeamMaterial(BaseColor, DetailColor, HighlightColor, LogoIndex);
+
+        roboMaterial = MatManager.CreateTeamMaterial(BaseColor, DetailColor, HighlightColor, LogoIndex);
         spawnManager.SetPlayerLogo(PlayerIndex, LogoIndex);
         units = spawnManager.GetUnits(UnitNames, PlayerIndex);
         PosInput = 0;

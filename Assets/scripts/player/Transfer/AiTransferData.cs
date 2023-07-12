@@ -3,6 +3,6 @@ using UnityEngine;
 public class AiTransferData : PlayerDataTransferClass
 {
     public StringArray[] aiPlayerCombos;
-    public float emerencyDist;
+    public float emerencyDist = 5f;
 
 }

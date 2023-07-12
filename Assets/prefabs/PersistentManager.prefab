@@ -1,0 +1,257 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8362839826387592397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8362839826387592396}
+  - component: {fileID: 8362839826387592399}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8362839826387592396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362839826387592397}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8362839828277640200}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8362839826387592399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362839826387592397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c5b157f16ce9994fb97c073369f2741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &8362839828277640206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8362839828277640200}
+  - component: {fileID: 8362839828277640203}
+  m_Layer: 0
+  m_Name: PersistentManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8362839828277640200
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362839828277640206}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 920.92944, y: 675.5724, z: 7.6458306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8362839826387592396}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8362839828277640203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362839828277640206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96af95eeec1454241a3f985dd2fd1689, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameProperties:
+    humanPlayers:
+    - Alliance: 1
+      slotIndex: 0
+      logoIndex: 8
+      mainColor: {r: 0, g: 0, b: 0, a: 0}
+      detailColor: {r: 1, g: 0, b: 0, a: 0}
+      highlightColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0}
+      units:
+      - mace
+      - spear
+      - gun
+      - scythe
+      - scout
+    aiPlayers:
+    - Alliance: -1
+      slotIndex: 1
+      logoIndex: 6
+      mainColor: {r: 0, g: 0, b: 0, a: 0}
+      detailColor: {r: 0.73903704, g: 0, b: 1, a: 0}
+      highlightColor: {r: 1, g: 0, b: 0, a: 0}
+      units:
+      - sword
+      - spear
+      - gun
+      - axe
+      - scythe
+      aiPlayerCombos:
+      - array:
+        - scythe
+        - spear
+        - gun
+        - gun
+      - array:
+        - sword
+        - spear
+        - gun
+      - array:
+        - scythe
+        - spear
+        - axe
+      - array:
+        - sword
+        - axe
+        - axe
+      - array:
+        - axe
+        - spear
+      emerencyDist: 4.5
+    map: {fileID: 0}
+    roundTime: 210
+  aiUnitCountering:
+  - array:
+    - sword
+    - mace
+    - scythe
+    - sword
+    - axe
+    - scout
+    - gun
+    - spear
+  - array:
+    - spear
+    - sword
+    - axe
+    - scythe
+    - spear
+    - gun
+    - scout
+    - mace
+  - array:
+    - mace
+    - spear
+    - gun
+    - axe
+    - mace
+    - scythe
+    - sword
+    - scout
+  - array:
+    - scythe
+    - scythe
+    - spear
+    - sword
+    - gun
+    - mace
+    - scout
+    - axe
+  - array:
+    - scout
+    - mace
+    - sword
+    - scythe
+    - axe
+    - scout
+    - spear
+    - gun
+  - array:
+    - gun
+    - scout
+    - axe
+    - spear
+    - sword
+    - mace
+    - scythe
+    - gun
+  - array:
+    - axe
+    - mace
+    - gun
+    - scout
+    - spear
+    - axe
+    - scythe
+    - sword
+  loader: {fileID: 8362839826387592399}
+  avaiableUnits:
+  - unitName: sword
+    spawnTime: 2
+    pickSpirte: {fileID: 21300000, guid: 23506f6c721c715439c2a86c0ef2a4d0, type: 3}
+    aiComboSortLayer: 2
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}
+  - unitName: spear
+    spawnTime: 1.25
+    pickSpirte: {fileID: 21300000, guid: ade25b39d51accf43a8f88ddfb732c2c, type: 3}
+    aiComboSortLayer: 4
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}
+  - unitName: gun
+    spawnTime: 1.75
+    pickSpirte: {fileID: 21300000, guid: f4ac9f571de4db346994fbc2d11ecbb5, type: 3}
+    aiComboSortLayer: 6
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}
+  - unitName: axe
+    spawnTime: 2
+    pickSpirte: {fileID: 21300000, guid: 917f41ba57569ed4abc4db1a6e1889e7, type: 3}
+    aiComboSortLayer: 3
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}
+  - unitName: mace
+    spawnTime: 2
+    pickSpirte: {fileID: 21300000, guid: a645fcb69dfde674895210f189b78fee, type: 3}
+    aiComboSortLayer: 1
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}
+  - unitName: scout
+    spawnTime: 1
+    pickSpirte: {fileID: 21300000, guid: 36313b09a0ed9f046ade2341f4f2cac9, type: 3}
+    aiComboSortLayer: 5
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}
+  - unitName: scythe
+    spawnTime: 3.5
+    pickSpirte: {fileID: 21300000, guid: dcf547aecdf22f84a94da88bf3c97669, type: 3}
+    aiComboSortLayer: 0
+    pickImage: {fileID: 0}
+    pickSlider: {fileID: 0}
+    rectPosition: {fileID: 0}

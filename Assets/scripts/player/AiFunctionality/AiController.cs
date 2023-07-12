@@ -101,7 +101,7 @@ public class AiController : PlayerController
                 }
                 enemies++;
                 float distance = Mathf.Abs((unit.transform.position - transform.position).z);
-                if (distance < shortestDistance || shortestDistance == 0)
+                if ((distance < shortestDistance || shortestDistance == 0))
                 {
                     laneSelectIndexes[0] = i;
                     shortestDistance = distance;
@@ -117,7 +117,7 @@ public class AiController : PlayerController
                 return;
             }
 
-            if (biggestDifference < enemies - allies)
+            if (biggestDifference < enemies - allies && lanes[i].units.Count < 50)
             {
                 biggestDifference = enemies - allies;
                 laneSelectIndexes[1] = i;

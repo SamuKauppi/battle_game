@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// Controls the game
@@ -18,14 +19,15 @@ public class GameController : MonoBehaviour
 
     // References
     private ObjectPooler pooler;
-    private PersistentManager pManager;         // Reference to a manager that transfers data between scenes
+    private PersistentManager pManager;                     // Reference to a manager that transfers data between scenes
+    [SerializeField] private MaterialManager matManager;
 
-    // Every lane and their data including position and units
+    // Lane data
     [SerializeField] private UnitsInLane[] lanes;
-    // Game score: the one who gets 10 or more points wins
-    private int playerScores = 0;
-    // Game time: the one who has more points at end of the time wins
-    private float timer;
+
+    // Game data
+    private int playerScores = 0;       // Game score: the one who gets 10 or more points wins
+    private float timer;                // Game time: the one who has more points at end of the time wins
 
     // UI elements
     [SerializeField] private Slider scoreSlider;    // Score
@@ -73,10 +75,10 @@ public class GameController : MonoBehaviour
     /// <returns></returns>
     private PlayerController SpawnPlayer(PlayerDataTransferClass player, bool isAi)
     {
-        PlayerController p;
+        PlayerController playerQualities;
         if (!isAi)
         {
-            p = Instantiate(humanPlayerPrefab);
+            playerQualities = Instantiate(humanPlayerPrefab);
         }
         else
         {
@@ -84,23 +86,23 @@ public class GameController : MonoBehaviour
             AiTransferData aiTransfer = (AiTransferData)player;
             aiPlayer.Combos = aiTransfer.aiPlayerCombos;
             aiPlayer.UnitData = pManager.aiUnitCountering;
-            p = aiPlayer;
+            playerQualities = aiPlayer;
         }
 
-        p.SetPlayerProperties(player.Alliance, 0, player.logoIndex, player.BaseColor, player.detailColor, player.highlightColor, player.units);
+        playerQualities.SetPlayerProperties(player.Alliance, player.slotIndex, player.logoIndex, player.mainColor, player.detailColor, 
+            player.highlightColor, player.units, matManager);
 
-        p.transform.parent = playerParent;
+        playerQualities.transform.parent = playerParent;
 
         for (int i = 0; i < playerTransforms.Length; i++)
         {
-            if (playerTransforms[i].Alliance == p.Alliance)
+            if (playerTransforms[i].Alliance == playerQualities.Alliance)
             {
-                p.transform.position = playerTransforms[i].Pos;
-                p.transform.rotation = playerTransforms[i].Rot;
+                playerQualities.transform.SetPositionAndRotation(playerTransforms[i].Pos, playerTransforms[i].Rot);
                 break;
             }
         }
-        return p;
+        return playerQualities;
     }
 
     private void Update()
@@ -108,7 +110,20 @@ public class GameController : MonoBehaviour
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
-            Debug.Log("That is game");
+            Debug.Log("Time is over!");
+            if(playerScores > 0)
+            {
+                Debug.Log("Allicance: 1 won!");
+            }
+            else if(playerScores < 0)
+            {
+                Debug.Log("Allicance: -1 won!");
+            }
+            else
+            {
+                Debug.Log("it's a tie");
+            }
+            PersistentManager.Instance.loader.LoadScene(0);
         }
         else
         {
@@ -175,7 +190,10 @@ public class GameController : MonoBehaviour
                 playerScores += target.Alliance;
                 scoreSlider.value = playerScores;
                 if (Mathf.Abs(playerScores) >= 10)
+                {
                     Debug.Log("Allicance: " + target.Alliance + " won!");
+                    PersistentManager.Instance.loader.LoadScene(0);
+                }
                 continue; // target reached the end
             }
 

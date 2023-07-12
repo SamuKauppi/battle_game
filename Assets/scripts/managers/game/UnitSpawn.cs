@@ -9,9 +9,11 @@ public class UnitSpawn
     public string unitName;
     public float spawnTime;
     public Sprite pickSpirte;
+    public int aiComboSortLayer;
 
+    // Only relevant in game screen
     [HideInInspector]
-    public Image pickImage;
+    public Image pickImage;             
     [HideInInspector]
     public Slider pickSlider;
     [HideInInspector]

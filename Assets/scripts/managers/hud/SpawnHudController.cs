@@ -7,13 +7,14 @@ public class SpawnHudController : MonoBehaviour
 {
     public static SpawnHudController instance;
 
-    [SerializeField] private UnitSpawn[] avaiableUnits;
+    private UnitSpawn[] avaiableUnits;
     [SerializeField] private UnitSelectionBoxes[] selectionBoxes;
     [SerializeField] private Sprite[] LogoSprites;
 
     private void Awake()
     {
         instance = this;
+        avaiableUnits = PersistentManager.Instance.avaiableUnits;
     }
     public UnitSpawn[] GetUnits(string[] names, int playerIndex)
     {
