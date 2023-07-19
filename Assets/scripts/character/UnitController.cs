@@ -17,14 +17,25 @@ public class UnitController : MonoBehaviour
     [SerializeField] private LazerGun gun;
 
     // Stats
+<<<<<<< HEAD
     public string UnitName;                                 // Used for spawning
     public float hp;                                        // Units hp
     [SerializeField] private float attack_range;            // How far can this unit attack
     [SerializeField] private bool useProjectile;            // Does this unit shoot projectiles
     [SerializeField] private float attack_speed;            // Delay time between attacks
+=======
+    [SerializeField] private string unitName;           // Identify unit type
+    public string UnitName { get; private set; }        // To access the name
+    [SerializeField] private float hp;                  // Units hp
+    [SerializeField] private float damageMultiplier = 1;// Damage increase
+    [SerializeField] private float attack_range;        // How far can this unit attack
+    [SerializeField] private bool useProjectile;        // Does this unit shoot projectiles
+    [SerializeField] private float attack_speed;        // Delay time between attacks
+>>>>>>> 667d194e069177359a176cad5fc5aacb2bb54d9f
     private float attack_timer;
     [SerializeField] private float stop_range;          // When the unit stops moving
     [SerializeField] private float speed;               // How fast does this unit move
+    [SerializeField] private Upgrade[] affectedUpgrades;// 
 
     // Upgrades
     [SerializeField] private string[] validUpgrades; // Upgrade names that affect this unit
@@ -77,6 +88,7 @@ public class UnitController : MonoBehaviour
     {
         manager = GameController.Instance;
         pooler = ObjectPooler.Instance;
+        UnitName = unitName;
         maxHp = hp;
         movement = speed;
         // Stop moving at the beginning
@@ -416,7 +428,7 @@ public class UnitController : MonoBehaviour
             _ => GetDamageModifier(slashArmor),
         };
         // Calculate damage and take damage
-        float damage = amount * Random.Range(0.85f, 1.16f) * multiplier;
+        float damage = amount * Random.Range(0.95f, 1.06f) * multiplier;
         hp -= damage;
 
         pooler.GetPooledObject("sparks", transform.position);
