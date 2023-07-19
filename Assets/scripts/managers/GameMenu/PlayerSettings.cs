@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,11 +57,11 @@ public class PlayerSettings : MonoBehaviour
             return;
 
         logo.value = playerData.logoIndex;
-        teamColors[0].color = playerData.mainColor;
-        teamColors[1].color = playerData.detailColor;
-        teamColors[2].color = playerData.highlightColor;
+
+        teamColors[0].color = new Color(playerData.mainColor.r, playerData.mainColor.g, playerData.mainColor.b, 1f);
+        teamColors[1].color = new Color(playerData.detailColor.r, playerData.detailColor.g, playerData.detailColor.b, 1f);
+        teamColors[2].color = new Color(playerData.highlightColor.r, playerData.highlightColor.g, playerData.highlightColor.b, 1f);
 
         unitAdder.AddUnits(playerData.units);
     }
-
 }

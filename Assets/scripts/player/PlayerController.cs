@@ -122,7 +122,7 @@ public abstract class PlayerController : MonoBehaviour
     {
         if (spawnTimer > units[selectedUnit].spawnTime)
         {
-            gameManager.AddUnit(Alliance, selectedPos, selector.position, transform.rotation, units[selectedUnit].unitName, roboMaterial);
+            gameManager.SpawnUnit(Alliance, selectedPos, selector.position, transform.rotation, units[selectedUnit].unitName, roboMaterial);
             spawnTimer = 0f;
             OnUnitSpawn();
         }

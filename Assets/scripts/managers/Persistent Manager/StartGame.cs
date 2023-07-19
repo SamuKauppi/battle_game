@@ -8,10 +8,10 @@ public class StartGame : MonoBehaviour
 {
     private GameTransferClass gameData;
     // Maps
-    [SerializeField] private GameObject[] gameMaps;
-    [SerializeField] private TMP_Dropdown mapsSelector;
+    [SerializeField] private GameObject[] gameMapPrefabs;
+    private int mapSelectorIndex;
     // Time
-    private int roundTime;
+    private int roundTime = 210;
     [SerializeField] private int minTime;
     [SerializeField] private int maxTime;
     [SerializeField] private TMP_Text timeText;
@@ -21,11 +21,41 @@ public class StartGame : MonoBehaviour
     private void Start()
     {
         gameData = PersistentManager.Instance.gameProperties;
-        roundTime = 210;
+
+        foreach (PlayerSettings player in players)
+        {
+            foreach (HumanPlayerTransfer transferData in gameData.humanPlayers)
+            {
+                if (player.playerSlotIndex == transferData.slotIndex)
+                {
+                    player.gameObject.SetActive(true);
+                    break;
+                }
+            }
+
+            foreach (AiTransferData transferData in gameData.aiPlayers)
+            {
+                if (player.playerSlotIndex == transferData.slotIndex)
+                {
+                    player.gameObject.SetActive(true);
+                    break;
+                }
+            }
+        }
+    }
+    public void AlterTime(int value)
+    {
+        roundTime = Mathf.Clamp(roundTime + value, minTime, maxTime);
+        if (timeText != null)
+            timeText.text = roundTime + " s";
+    }
+    public void SelectMap(TMP_Dropdown dropdownValue)
+    {
+        mapSelectorIndex = dropdownValue.value;
     }
     public void LaunchGame()
     {
-        gameData.map = gameMaps[mapsSelector.value];
+        gameData.map = gameMapPrefabs[mapSelectorIndex];
         gameData.roundTime = roundTime;
         gameData.aiPlayers = new List<AiTransferData>();
         gameData.humanPlayers = new List<HumanPlayerTransfer>();
@@ -124,11 +154,5 @@ public class StartGame : MonoBehaviour
         }
 
         PersistentManager.Instance.loader.LoadScene(1);
-    }
-
-    public void AlterTime(int value)
-    {
-        roundTime = Mathf.Clamp(roundTime + value, minTime, maxTime);
-        timeText.text = roundTime + " s";
     }
 }

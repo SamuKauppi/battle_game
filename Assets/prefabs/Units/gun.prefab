@@ -104,25 +104,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edc10733d70798642b44bae4522e8032, type: 3}
---- !u!1 &2697791541523442041 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: edc10733d70798642b44bae4522e8032, type: 3}
-  m_PrefabInstance: {fileID: 3004203097749967912}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3244996072462152107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2697791541523442041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 226ab5f0fd5688048b585b5c77a19aed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pivotPoint: {fileID: 7083287388960288975}
-  lazer_speed: 2
 --- !u!4 &3331445128555312067 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: edc10733d70798642b44bae4522e8032, type: 3}
@@ -141,12 +122,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: hp
-      value: 35
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: gun
       value: 
-      objectReference: {fileID: 3244996072462152107}
+      objectReference: {fileID: 1631057058042538119}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: speed
       value: 1.05
@@ -161,11 +142,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: bluntArmor
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: slashArmor
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: stop_range
@@ -197,11 +178,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].damage
-      value: 24
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[1].damage
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].maxRange
@@ -295,6 +276,25 @@ PrefabInstance:
     - {fileID: 7920593496683651855, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
     - {fileID: 4986132798509453198, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+--- !u!1 &1779563241377111630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6263984149018320720, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 5646497106350440734}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1631057058042538119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779563241377111630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226ab5f0fd5688048b585b5c77a19aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pivotPoint: {fileID: 7083287388960288975}
+  projectilePrefab: {fileID: 2030905689922383156, guid: f538b054aebf13446872709c40b658f4, type: 3}
 --- !u!137 &5240793485351875613 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 497483776350123267, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}

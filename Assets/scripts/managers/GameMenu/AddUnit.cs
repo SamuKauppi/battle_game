@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class AddUnit : MonoBehaviour
@@ -21,7 +22,6 @@ public class AddUnit : MonoBehaviour
         avaliableUnits = PersistentManager.Instance.avaiableUnits;
         for (int i = 0; i < dropDownSelectors.Length; i++)
         {
-            dropDownSelectors[i].value = i;
             dropDownSelectors[i].onValueChanged.AddListener(delegate { ReloadUnitTypes(); });
         }
     }
@@ -45,7 +45,7 @@ public class AddUnit : MonoBehaviour
         }
         else
         {
-            // If the current spawn slot is not active, iterate through in reverse order
+            // If the current spawnSlot is not active, iterate through in reverse order
             for (int i = unitSlots.Length - 1; i >= 0; i--)
             {
                 if (unitSlots[i].gameObject.activeInHierarchy)
@@ -63,25 +63,26 @@ public class AddUnit : MonoBehaviour
     private void ReloadUnitTypes()
     {
         selectedUnits.Clear();
-        for (int i = 0; i < dropDownSelectors.Length; i++)
+        foreach (TMP_Dropdown dropDown in dropDownSelectors)
         {
-            if (dropDownSelectors[i].gameObject.activeInHierarchy)
+            if (dropDown.gameObject.activeInHierarchy)
             {
-                if (selectedUnits.Contains(dropDownSelectors[i].options[dropDownSelectors[i].value].text))
+                if (selectedUnits.Contains(dropDown.options[dropDown.value].text))
                 {
                     for (int x = 0; x < avaliableUnits.Length; x++)
                     {
                         if (!selectedUnits.Contains(avaliableUnits[x].unitName))
                         {
                             selectedUnits.Add(avaliableUnits[x].unitName);
-                            dropDownSelectors[i].value = x;
+                            dropDown.value = x;
+                            dropDown.RefreshShownValue();
                             break;
                         }
                     }
                 }
                 else
                 {
-                    selectedUnits.Add(dropDownSelectors[i].options[dropDownSelectors[i].value].text);
+                    selectedUnits.Add(dropDown.options[dropDown.value].text);
                 }
             }
         }
@@ -92,11 +93,13 @@ public class AddUnit : MonoBehaviour
         for (int i = 0; i < unitsToAdd.Length; i++)
         {
             dropDownSelectors[i].value = dropDownSelectors[i].options.FindIndex(option => option.text == unitsToAdd[i]);
+            dropDownSelectors[i].RefreshShownValue();
+            selectedUnits.Add(unitsToAdd[i]);
             if (i > 0)
                 EditUnitCount(1);
         }
         isAddingMultipleSlots = false;
-        ReloadUnitTypes();
+
     }
     public void AddRandomUnits()
     {

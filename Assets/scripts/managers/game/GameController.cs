@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private MaterialManager matManager;
 
     // Lane data
+    [SerializeField] private Transform gameMapParent;
     [SerializeField] private UnitsInLane[] lanes;
 
     // Game data
@@ -31,6 +32,8 @@ public class GameController : MonoBehaviour
 
     // UI elements
     [SerializeField] private Slider scoreSlider;    // Score
+    [SerializeField] private Image Alliance1Image;  // Color of the left side
+    [SerializeField] private Image Alliance2Image;  // Color of the right side
     [SerializeField] private Slider clockSlider;    // Clock
 
 
@@ -49,14 +52,14 @@ public class GameController : MonoBehaviour
     private void StartGame()
     {
         // Spawn map
-        Instantiate(pManager.gameProperties.map, Vector3.zero, Quaternion.identity, transform);
+        Instantiate(pManager.gameProperties.map, Vector3.zero, Quaternion.identity, gameMapParent);
 
         // Initilize round timer
         timer = pManager.gameProperties.roundTime;
         clockSlider.maxValue = timer;
         clockSlider.value = timer;
 
-        // Initlize Players
+        // Initilize Players
         foreach (HumanPlayerTransfer playerData in pManager.gameProperties.humanPlayers)
         {
             SpawnPlayer(playerData, false);
@@ -89,8 +92,17 @@ public class GameController : MonoBehaviour
             playerQualities = aiPlayer;
         }
 
-        playerQualities.SetPlayerProperties(player.Alliance, player.slotIndex, player.logoIndex, player.mainColor, player.detailColor, 
+        playerQualities.SetPlayerProperties(player.Alliance, player.slotIndex, player.logoIndex, player.mainColor, player.detailColor,
             player.highlightColor, player.units, matManager);
+
+        if (playerQualities.Alliance > 0)
+        {
+            Alliance1Image.color = player.mainColor;
+        }
+        else
+        {
+            Alliance2Image.color = player.mainColor;
+        }
 
         playerQualities.transform.parent = playerParent;
 
@@ -111,11 +123,11 @@ public class GameController : MonoBehaviour
         if (timer <= 0)
         {
             Debug.Log("Time is over!");
-            if(playerScores > 0)
+            if (playerScores > 0)
             {
                 Debug.Log("Allicance: 1 won!");
             }
-            else if(playerScores < 0)
+            else if (playerScores < 0)
             {
                 Debug.Log("Allicance: -1 won!");
             }
@@ -140,7 +152,7 @@ public class GameController : MonoBehaviour
     /// <param name="rot"> Rotation of the unit </param>
     /// <param name="unitType"> Unit type </param>
     /// <param name="mat"> Material of the team </param>
-    public void AddUnit(int alliance, int xIndex, Vector3 pos, Quaternion rot, string unitType, Material mat)
+    public void SpawnUnit(int alliance, int xIndex, Vector3 pos, Quaternion rot, string unitType, Material mat)
     {
         if (!pooler)
             pooler = ObjectPooler.Instance;

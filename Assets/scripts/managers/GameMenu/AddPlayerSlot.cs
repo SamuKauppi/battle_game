@@ -6,7 +6,7 @@ public class AddPlayerSlot : MonoBehaviour
     [SerializeField] private RectTransform[] AnchoredPos;
     private int currentPosIndex;
 
-    public void EditPlayerCOunt(int value)
+    public void EditPlayerCount(int value)
     {
         if (value < 0 && currentPosIndex > 0)
         {

@@ -1,4 +1,6 @@
+using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,15 +16,7 @@ public class ColorWheel : MonoBehaviour
     private float hue = 0;
     private float saturation = 0;
     private float brightness = 0;
-
-    public Color topLeftColor;
-    public Color topRightColor;
-    public Color bottomLeftColor;
-    public Color bottomRightColor;
-    private Texture2D texture;
-
     private bool colorIsBeingHeld;
-    private bool hueIsBeingHeld;
 
     private bool IsActive { get; set; }
 
@@ -36,24 +30,14 @@ public class ColorWheel : MonoBehaviour
             colorIsBeingHeld = true;
         }
 
-        if (hueSlider.value != hue)
-        {
-            hueIsBeingHeld = true;
-        }
-
         if (Input.GetMouseButtonUp(0))
         {
-            if (hueIsBeingHeld)
-            {
-                ChangeHue();
-            }
-
             colorIsBeingHeld = false;
-            hueIsBeingHeld = false;
         }
 
         if (colorIsBeingHeld)
         {
+
             // Get the normalized position of the mouse within the color image
             RectTransformUtility.ScreenPointToLocalPointInRectangle(colorImage.rectTransform, Input.mousePosition, null, out Vector2 localMousePos);
 
@@ -77,12 +61,11 @@ public class ColorWheel : MonoBehaviour
         }
     }
 
-    private void ChangeHue()
+    public void ChangeHue(float sliderValue)
     {
-        hue = hueSlider.value;
+        hue = sliderValue;
         newColor = Color.HSVToRGB(hue, saturation, brightness);
-        topRightColor = Color.HSVToRGB(hue, 1f, 1f);
-        ApplyGradientColor();
+        colorImage.color = Color.HSVToRGB(hue, 1f, 1f);
     }
 
     public void GenerateRandomColor(Image target)
@@ -94,45 +77,11 @@ public class ColorWheel : MonoBehaviour
         previewImage.color = newColor;
     }
 
-    public void ApplyGradientColor()
-    {
-        if (colorImage != null)
-        {
-            // Get the size of the target image
-            Vector2 imageSize = colorImage.rectTransform.rect.size;
-            texture = new Texture2D((int)imageSize.x, (int)imageSize.y);
-
-            // Apply the gradient color to the texture
-            Color32[] colors = new Color32[texture.width * texture.height];
-            for (int x = 0; x < texture.width; x++)
-            {
-                for (int y = 0; y < texture.height; y++)
-                {
-                    float normalizedX = Mathf.InverseLerp(0, texture.width - 1, x);
-                    float normalizedY = Mathf.InverseLerp(0, texture.height - 1, y);
-
-                    colors[y * texture.width + x] = Color.Lerp(
-                        Color.Lerp(bottomLeftColor, bottomRightColor, normalizedX),
-                        Color.Lerp(topLeftColor, topRightColor, normalizedX),
-                        normalizedY); ;
-                }
-            }
-
-            // Apply the colors to the texture
-            texture.SetPixels32(colors);
-            texture.Apply();
-
-            // Apply the texture to the target image
-            colorImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
-        }
-    }
-
     public void ActivateColorPicker(Image target)
     {
         targetImage = target;
         IsActive = true;
         SetSelectedColor();
-        ChangeHue();
     }
 
     public void SetColor()

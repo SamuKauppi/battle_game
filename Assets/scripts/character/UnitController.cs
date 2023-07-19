@@ -17,15 +17,24 @@ public class UnitController : MonoBehaviour
     [SerializeField] private LazerGun gun;
 
     // Stats
-    public string UnitName;                             // Used for spawning
-    public float hp;                                    // Units hp
-    [SerializeField] private float damageMultiplier = 1;// Damage increase
-    [SerializeField] private float attack_range;        // How far can this unit attack
-    [SerializeField] private bool useProjectile;        // Does this unit shoot projectiles
-    [SerializeField] private float attack_speed;        // Delay time between attacks
+    public string UnitName;                                 // Used for spawning
+    public float hp;                                        // Units hp
+    [SerializeField] private float attack_range;            // How far can this unit attack
+    [SerializeField] private bool useProjectile;            // Does this unit shoot projectiles
+    [SerializeField] private float attack_speed;            // Delay time between attacks
     private float attack_timer;
     [SerializeField] private float stop_range;          // When the unit stops moving
     [SerializeField] private float speed;               // How fast does this unit move
+
+    // Upgrades
+    [SerializeField] private string[] validUpgrades; // Upgrade names that affect this unit
+    private HashSet<string> validUpgradeNames = new HashSet<string>();
+
+    // Damage
+    private float damageMultiplier = 1;    // Damage multiplier for effects
+    private float flatDamage = 0f;         // Damage increase for effects
+    private float upgradeMultiplier = 1;   // Damage multiplier through upgrades
+    private float flatUpgrade = 0f;        // Damage increase through upgrades
 
     // Attaks
     [SerializeField] private int selectedAttackIndex;   // Current attack selected
@@ -42,6 +51,8 @@ public class UnitController : MonoBehaviour
     [SerializeField] private float thrustArmor = 10;
     [SerializeField] private float bluntArmor = 10;
     [SerializeField] private float specialArmor = 10;
+    private float armorMultiplier = 1f;
+    private float flatArmor = 0f;
 
     // Targeting
     [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
@@ -61,6 +72,7 @@ public class UnitController : MonoBehaviour
     public int Zindex { get; set; }                     // Each unit in lane gets a Zindex to identify it
     public bool IsAlive { get { return hp > 0; } set { if (maxHp > 0) { hp = maxHp; } } } // Is this unit alive or set it alive
 
+    #region Start/Update
     private void Start()
     {
         manager = GameController.Instance;
@@ -78,6 +90,10 @@ public class UnitController : MonoBehaviour
             totalAttackSelectWeight += moveSet[i].selectWeight;
             moveSet[i].minSelectWeightRange = totalAttackSelectWeight - moveSet[i].selectWeight;
             moveSet[i].maxSelectWeightRange = totalAttackSelectWeight;
+        }
+        foreach (string upgrade in validUpgrades)
+        {
+            validUpgradeNames.Add(upgrade);
         }
     }
 
@@ -116,12 +132,14 @@ public class UnitController : MonoBehaviour
         // Apply movement
         MoveForward();
     }
+    #endregion
+    #region Movement/Targeting
 
     /// <summary>
     ///  Sets unit's movement
     /// </summary>
     /// <param name="value"> Start or Stop moving </param>
-    public void SetMoving(bool value)
+    private void SetMoving(bool value)
     {
         // If this unit is being knocked back, stop walk animation
         if (isKnocked)
@@ -260,7 +278,8 @@ public class UnitController : MonoBehaviour
     //        SetMoving(false);
     //    }
     //}
-
+    #endregion
+    #region Attacking/Taking Damage
     /// <summary>
     ///  Called when an attack connects
     /// </summary>
@@ -268,6 +287,7 @@ public class UnitController : MonoBehaviour
     {
         // Iterate through targets with the current attack and apply damage
         AttackType attack = moveSet[selectedAttackIndex];
+        float damage = attack.damage * upgradeMultiplier * damageMultiplier + flatDamage + flatUpgrade;
         foreach (TargetInRange target in targets)
         {
             if (target == null)
@@ -277,14 +297,12 @@ public class UnitController : MonoBehaviour
             {
                 if (useProjectile) // Check if it's a ranged unit with a projectile. Create projectile and apply damage in delay
                 {
-
-                    float projectileTravelTime = target.DistanceToTarget / gun.lazer_speed;
                     gun.ShootGun(target.Target.transform.position);
-                    StartCoroutine(AttackWithDelay(target, attack, projectileTravelTime));
+                    StartCoroutine(AttackWithDelay(target, damage, attack.attackType, target.DistanceToTarget / gun.Lazer_speed));
                 }
                 else
                 {
-                    target.Target.TakeDamage(attack.damage * damageMultiplier, attack.attackType);
+                    target.Target.TakeDamage(damage, attack.attackType);
                 }
             }
         }
@@ -297,10 +315,10 @@ public class UnitController : MonoBehaviour
     /// <param name="attack"> The attack </param>
     /// <param name="delay"> How long the attack will be delayed </param>
     /// <returns></returns>
-    private IEnumerator AttackWithDelay(TargetInRange target, AttackType attack, float delay)
+    private IEnumerator AttackWithDelay(TargetInRange target, float damage, string attackType, float delay)
     {
         yield return new WaitForSeconds(delay); // Delay based on the projectile travel time
-        target.Target.TakeDamage(attack.damage * damageMultiplier, attack.attackType);
+        target.Target.TakeDamage(damage, attackType);
     }
 
     /// <summary>
@@ -411,6 +429,7 @@ public class UnitController : MonoBehaviour
         {
             anim.SetTrigger("die");
             SetMoving(false);
+            pooler.GetPooledObject("explosion", transform.position);
         }
     }
     /// <summary>
@@ -420,7 +439,8 @@ public class UnitController : MonoBehaviour
     /// <returns></returns>
     private float GetDamageModifier(float armorValue)
     {
-        return 1 - (armorValue / (40 + Mathf.Abs(armorValue)));
+        float changedArmor = armorValue * armorMultiplier + flatArmor;
+        return 1 - (changedArmor / (40 + Mathf.Abs(changedArmor)));
     }
 
     /// <summary>
@@ -442,6 +462,7 @@ public class UnitController : MonoBehaviour
         isKnocked = false;
     }
 
+
     /// <summary>
     /// On the first frame of death animation
     /// </summary>
@@ -452,7 +473,6 @@ public class UnitController : MonoBehaviour
         anim.SetLayerWeight(1, 0f);
         alteredMovement = 0;
         SetAttack();
-        pooler.GetPooledObject("explosion", transform.position);
     }
 
     /// <summary>
@@ -462,5 +482,21 @@ public class UnitController : MonoBehaviour
     {
         anim.SetTrigger("live");
         gameObject.SetActive(false);
+    }
+    #endregion
+    public void ApplyUpgrades(Upgrade[] upgrades)
+    {
+        foreach (Upgrade upgrade in upgrades)
+        {
+            if (validUpgradeNames.Contains(upgrade.upgradeName))
+            {
+                switch (upgrade.upgradeName)
+                {
+
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }
