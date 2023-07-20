@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,35 +18,25 @@ public class UnitController : MonoBehaviour
     [SerializeField] private LazerGun gun;
 
     // Stats
-<<<<<<< HEAD
-    public string UnitName;                                 // Used for spawning
-    public float hp;                                        // Units hp
+    [SerializeField] private Stats stats;
+    private float maxHp;                                // Hp value used for resetting when dead
+    private float hp;                                        // Units hp
     [SerializeField] private float attack_range;            // How far can this unit attack
     [SerializeField] private bool useProjectile;            // Does this unit shoot projectiles
     [SerializeField] private float attack_speed;            // Delay time between attacks
-=======
     [SerializeField] private string unitName;           // Identify unit type
     public string UnitName { get; private set; }        // To access the name
-    [SerializeField] private float hp;                  // Units hp
-    [SerializeField] private float damageMultiplier = 1;// Damage increase
-    [SerializeField] private float attack_range;        // How far can this unit attack
-    [SerializeField] private bool useProjectile;        // Does this unit shoot projectiles
-    [SerializeField] private float attack_speed;        // Delay time between attacks
->>>>>>> 667d194e069177359a176cad5fc5aacb2bb54d9f
-    private float attack_timer;
+    private float attack_timer;                         // Timer for attacks
     [SerializeField] private float stop_range;          // When the unit stops moving
     [SerializeField] private float speed;               // How fast does this unit move
-    [SerializeField] private Upgrade[] affectedUpgrades;// 
 
     // Upgrades
-    [SerializeField] private string[] validUpgrades; // Upgrade names that affect this unit
-    private HashSet<string> validUpgradeNames = new HashSet<string>();
+    [SerializeField] private string[] validUpgradeNames;    // Upgrade names that affect this unit
+    private Dictionary<string, Upgrade> validUpgrades = new();
 
     // Damage
     private float damageMultiplier = 1;    // Damage multiplier for effects
     private float flatDamage = 0f;         // Damage increase for effects
-    private float upgradeMultiplier = 1;   // Damage multiplier through upgrades
-    private float flatUpgrade = 0f;        // Damage increase through upgrades
 
     // Attaks
     [SerializeField] private int selectedAttackIndex;   // Current attack selected
@@ -57,13 +48,19 @@ public class UnitController : MonoBehaviour
     private bool shouldAttack;                          // Should the unit be attacking
 
     // Armor
-    private float maxHp;                                // Hp value used for resetting when dead
     [SerializeField] private float slashArmor = 10;
     [SerializeField] private float thrustArmor = 10;
     [SerializeField] private float bluntArmor = 10;
     [SerializeField] private float specialArmor = 10;
     private float armorMultiplier = 1f;
     private float flatArmor = 0f;
+
+
+    // Affected from player upgrades
+    private float damageUpgradeMultiplier = 1f;     // Damage multiplier through upgrades
+    private float upgradeFlatUpgrade = 0f;          // Damage increase through upgrades
+    private float armorUpgradeMultiplier = 1f;      // Armor multiplier through upgrades
+    private float armorFlatUpgrade = 1f;            // Armor multiplier through upgrades
 
     // Targeting
     [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
@@ -77,7 +74,6 @@ public class UnitController : MonoBehaviour
     private float alteredMovement;                      // When this unit is faster than an ally in front of this, use their speed
     private bool isKnocked;                             // Stops moving while being knocked back
     public float GetSpeed { get { return speed; } }     // Return speed
-    public float GetMovement { get { return movement; } }
     public int Alliance { get; set; }                   // Alliance of this unit
     public int Xindex { get; set; }                     // On which lane this unit is
     public int Zindex { get; set; }                     // Each unit in lane gets a Zindex to identify it
@@ -102,10 +98,6 @@ public class UnitController : MonoBehaviour
             totalAttackSelectWeight += moveSet[i].selectWeight;
             moveSet[i].minSelectWeightRange = totalAttackSelectWeight - moveSet[i].selectWeight;
             moveSet[i].maxSelectWeightRange = totalAttackSelectWeight;
-        }
-        foreach (string upgrade in validUpgrades)
-        {
-            validUpgradeNames.Add(upgrade);
         }
     }
 
@@ -299,7 +291,7 @@ public class UnitController : MonoBehaviour
     {
         // Iterate through targets with the current attack and apply damage
         AttackType attack = moveSet[selectedAttackIndex];
-        float damage = attack.damage * upgradeMultiplier * damageMultiplier + flatDamage + flatUpgrade;
+        float damage = attack.damage * damageUpgradeMultiplier * damageMultiplier + flatDamage + upgradeFlatUpgrade;
         foreach (TargetInRange target in targets)
         {
             if (target == null)
@@ -496,19 +488,43 @@ public class UnitController : MonoBehaviour
         gameObject.SetActive(false);
     }
     #endregion
-    public void ApplyUpgrades(Upgrade[] upgrades)
+    public void AddUpgrades(Upgrade[] newUpgrades)
     {
-        foreach (Upgrade upgrade in upgrades)
+        foreach (Upgrade newUpgrade in newUpgrades)
         {
-            if (validUpgradeNames.Contains(upgrade.upgradeName))
+            if (!validUpgradeNames.Contains(newUpgrade.upgradeName))
             {
-                switch (upgrade.upgradeName)
-                {
+                continue; // Skip invalid upgrades
+            }
 
-                    default:
-                        break;
-                }
+
+            if (validUpgrades.ContainsKey(newUpgrade.upgradeName))
+            {
+                validUpgrades[newUpgrade.upgradeName] = newUpgrade; // Overwrite the existing upgrade
+            }
+            else
+            {
+                validUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
             }
         }
+    }
+
+    public float GetUpgradeFlat(string upgradeName)
+    {
+        if (validUpgrades.TryGetValue(upgradeName, out Upgrade upgrade))
+        {
+            return upgrade.upgradeFlat;
+        }
+
+        return 0; // Upgrade not found
+    }
+    public float GetUpgradeMultiplier(string upgradeName)
+    {
+        if (validUpgrades.TryGetValue(upgradeName, out Upgrade upgrade))
+        {
+            return upgrade.upgradeMultiplier;
+        }
+
+        return 1; // Upgrade not found
     }
 }

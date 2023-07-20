@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class AddUnit : MonoBehaviour
 {
-    [SerializeField] private List<string> selectedUnits = new();
+    private readonly HashSet<string> selectedUnits = new();
     [SerializeField] private UnitSpawn[] avaliableUnits;
     [SerializeField] private TMP_Dropdown[] dropDownSelectors;
     [SerializeField] private RectTransform[] unitSlots;
