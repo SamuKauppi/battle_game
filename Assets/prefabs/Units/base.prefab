@@ -48,14 +48,20 @@ MonoBehaviour:
   anim: {fileID: 6263984149670448313}
   myRend: {fileID: 7920593496683651855}
   gun: {fileID: 0}
-  UnitName: 
-  hp: 100
-  damageMultiplier: 1
-  attack_range: 1.1
-  useProjectile: 0
-  attack_speed: 0
-  stop_range: 0.8
-  speed: 1
+  currentStats:
+    hp: 0
+    attack_range: 0
+    useProjectile: 0
+    attack_delay: 0.1
+    attack_speed: 1
+    unitName: 
+    stop_range: 0
+    maxSpeed: 0
+    slashArmor: 10
+    thrustArmor: 10
+    bluntArmor: 10
+    specialArmor: 10
+  validUpgradeNames: []
   selectedAttackIndex: 0
   randomIndexAtStart: 0
   moveSet:
@@ -109,10 +115,7 @@ MonoBehaviour:
     maxRange: 1
     minRange: 0
     stopMovement: 0
-  slashArmor: 10
-  thrustArmor: 10
-  bluntArmor: 10
-  specialArmor: 10
+  shouldAttack: 0
   targets: []
 --- !u!1001 &6263984148705341736
 PrefabInstance:

@@ -4815,6 +4815,8 @@ MonoBehaviour:
   - {fileID: 1955311865}
   - {fileID: 2008783907}
   - {fileID: 1337949169}
+  alliance1PlayerAdder: {fileID: 1945643395}
+  alliance2PlayerAdder: {fileID: 351581221}
 --- !u!1 &1888419991
 GameObject:
   m_ObjectHideFlags: 0
@@ -5773,28 +5775,100 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.b
-      value: 0.32941177
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.g
-      value: 0.5950116
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.r
-      value: 0.6039216
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[2].mainColor.b
+      propertyPath: gameProperties.humanPlayers.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[2].mainColor.g
-      value: 0.1348235
+      propertyPath: gameProperties.aiPlayers.Array.data[0].logoIndex
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[2].mainColor.r
+      propertyPath: gameProperties.aiPlayers.Array.data[1].slotIndex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].mainColor.b
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].mainColor.g
+      value: 0.045587063
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].mainColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.g
+      value: 0.061854143
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].detailColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].detailColor.g
+      value: 0.9161035
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].detailColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].detailColor.g
+      value: 0.9786632
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].detailColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].highlightColor.b
+      value: 0.5568628
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].units.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].highlightColor.b
+      value: 0.55701256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].highlightColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].highlightColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].units.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].units.Array.data[0]
+      value: scythe
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[0].units.Array.data[3]
+      value: mace
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].units.Array.data[0]
+      value: scythe
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: gameProperties.aiPlayers.Array.data[1].units.Array.data[3]
+      value: mace
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640206, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
       propertyPath: m_Name

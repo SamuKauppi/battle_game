@@ -17,42 +17,69 @@ public class StartGame : MonoBehaviour
     [SerializeField] private TMP_Text timeText;
     // Players
     [SerializeField] private PlayerSettings[] players;
+    [SerializeField] private AddPlayerSlot alliance1PlayerAdder;
+    [SerializeField] private AddPlayerSlot alliance2PlayerAdder;
 
+
+    /// <summary>
+    /// Load data from PersistentManager at Start and activate player slots for them
+    /// </summary>
     private void Start()
     {
         gameData = PersistentManager.Instance.gameProperties;
 
         foreach (PlayerSettings player in players)
         {
-            foreach (HumanPlayerTransfer transferData in gameData.humanPlayers)
-            {
-                if (player.playerSlotIndex == transferData.slotIndex)
-                {
-                    player.gameObject.SetActive(true);
-                    break;
-                }
-            }
+            int playerSlotIndex = player.playerSlotIndex;
+            bool alliance1CountEdited = false;
+            bool alliance2CountEdited = false;
 
-            foreach (AiTransferData transferData in gameData.aiPlayers)
+            foreach (PlayerDataTransferClass transferData in gameData.humanPlayers.Concat<PlayerDataTransferClass>(gameData.aiPlayers))
             {
-                if (player.playerSlotIndex == transferData.slotIndex)
+                if (playerSlotIndex == transferData.slotIndex)
                 {
-                    player.gameObject.SetActive(true);
-                    break;
+                    // Slots jump from left to right
+                    if (playerSlotIndex % 2 != 0)
+                    {
+                        if (alliance1CountEdited)
+                        {
+                            alliance1PlayerAdder.EditPlayerCount(1);
+                        }
+                        alliance1CountEdited = true;
+                    }
+                    else
+                    {
+                        if (alliance2CountEdited)
+                        {
+                            alliance2PlayerAdder.EditPlayerCount(1);
+                        }
+                        alliance2CountEdited = true;
+                    }
                 }
             }
         }
     }
+    /// <summary>
+    /// Edits the round time
+    /// </summary>
+    /// <param name="value"></param>
     public void AlterTime(int value)
     {
         roundTime = Mathf.Clamp(roundTime + value, minTime, maxTime);
         if (timeText != null)
             timeText.text = roundTime + " s";
     }
+    /// <summary>
+    /// Selects the map that will be used
+    /// </summary>
+    /// <param name="dropdownValue"></param>
     public void SelectMap(TMP_Dropdown dropdownValue)
     {
         mapSelectorIndex = dropdownValue.value;
     }
+    /// <summary>
+    /// Loads all the data from player settings
+    /// </summary>
     public void LaunchGame()
     {
         gameData.map = gameMapPrefabs[mapSelectorIndex];

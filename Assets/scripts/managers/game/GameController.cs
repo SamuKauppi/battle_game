@@ -165,6 +165,7 @@ public class GameController : MonoBehaviour
         lanes[xIndex].indexCounter += 1;
         unit.Alliance = alliance;
         unit.IsAlive = true;
+        unit.OnUnitSpawn();
         lanes[xIndex].units.Add(unit);
     }
 

@@ -12,22 +12,27 @@ public class ObjectPooler : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        for (int i = 0; i < objectsToBePooled.Length; i++)
+        foreach (PooledObject pooledObj in objectsToBePooled)
         {
             Queue<GameObject> tempQueue = new();
-            for (int j = 0; j < objectsToBePooled[i].amount; j++)
+            if (pooledObj.parent == null)
             {
-                GameObject obj = Instantiate(objectsToBePooled[i].obj, objectsToBePooled[i].parent);
+                pooledObj.parent = transform;
+            }
+            for (int j = 0; j < pooledObj.amount; j++)
+            {
+                GameObject obj = Instantiate(pooledObj.obj, pooledObj.parent);
                 obj.SetActive(false);
                 tempQueue.Enqueue(obj);
             }
-            objectPool.Add(objectsToBePooled[i].ident, tempQueue);
+            objectPool.Add(pooledObj.ident, tempQueue);
         }
     }
 
     public GameObject GetPooledObject(string ident, Vector3 pos = new Vector3())
     {
         if (!objectPool.ContainsKey(ident)) return null;
+
 
         for (int i = 0; i < objectPool[ident].Count; i++)
         {
@@ -41,11 +46,11 @@ public class ObjectPooler : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < objectsToBePooled.Length; i++)
+        foreach (PooledObject pooledObj in objectsToBePooled)
         {
-            if (objectsToBePooled[i].ident == ident)
+            if (pooledObj.ident == ident)
             {
-                objectToCheck = Instantiate(objectsToBePooled[i].obj, objectsToBePooled[i].parent);
+                objectToCheck = Instantiate(pooledObj.obj, pooledObj.parent);
                 objectToCheck.SetActive(true);
                 objectToCheck.transform.position = pos;
                 objectPool[ident].Enqueue(objectToCheck);

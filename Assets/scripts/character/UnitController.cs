@@ -18,25 +18,14 @@ public class UnitController : MonoBehaviour
     [SerializeField] private LazerGun gun;
 
     // Stats
-    [SerializeField] private Stats stats;
-    private float maxHp;                                // Hp value used for resetting when dead
-    private float hp;                                        // Units hp
-    [SerializeField] private float attack_range;            // How far can this unit attack
-    [SerializeField] private bool useProjectile;            // Does this unit shoot projectiles
-    [SerializeField] private float attack_speed;            // Delay time between attacks
-    [SerializeField] private string unitName;           // Identify unit type
     public string UnitName { get; private set; }        // To access the name
     private float attack_timer;                         // Timer for attacks
-    [SerializeField] private float stop_range;          // When the unit stops moving
-    [SerializeField] private float speed;               // How fast does this unit move
+    [SerializeField] private Stats currentStats;
 
     // Upgrades
-    [SerializeField] private string[] validUpgradeNames;    // Upgrade names that affect this unit
-    private Dictionary<string, Upgrade> validUpgrades = new();
-
-    // Damage
-    private float damageMultiplier = 1;    // Damage multiplier for effects
-    private float flatDamage = 0f;         // Damage increase for effects
+    private Stats baseStats;                                                // Used to store the base stats for resetting
+    [SerializeField] private string[] validUpgradeNames;                    // Upgrade names that affect this unit
+    private readonly Dictionary<string, Upgrade> appliedUpgrades = new();   // Upgrades applied to this unit
 
     // Attaks
     [SerializeField] private int selectedAttackIndex;   // Current attack selected
@@ -45,22 +34,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] private AttackType[] moveSet;      // Moves the unit uses
     private float totalAttackSelectWeight;              // Used for selecting moves based on it's weight value
     private bool disableTopLayer;                       // This prevents top animation layer to be turned off before an attack animation ends
-    private bool shouldAttack;                          // Should the unit be attacking
-
-    // Armor
-    [SerializeField] private float slashArmor = 10;
-    [SerializeField] private float thrustArmor = 10;
-    [SerializeField] private float bluntArmor = 10;
-    [SerializeField] private float specialArmor = 10;
-    private float armorMultiplier = 1f;
-    private float flatArmor = 0f;
-
-
-    // Affected from player upgrades
-    private float damageUpgradeMultiplier = 1f;     // Damage multiplier through upgrades
-    private float upgradeFlatUpgrade = 0f;          // Damage increase through upgrades
-    private float armorUpgradeMultiplier = 1f;      // Armor multiplier through upgrades
-    private float armorFlatUpgrade = 1f;            // Armor multiplier through upgrades
+    [SerializeField] private bool shouldAttack;                          // Should the unit be attacking
 
     // Targeting
     [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
@@ -70,28 +44,32 @@ public class UnitController : MonoBehaviour
     private const float targetUpdateThreshold = 0.1f;   // Threshold
 
     // Movement          
-    private float movement;                             // Normal movement speed of this unit
-    private float alteredMovement;                      // When this unit is faster than an ally in front of this, use their speed
+    private float currentSpeed;                         // Normal movement speed of this unit
+    private float alteredSpeed;                         // When this unit is faster than an ally in front of this, use their speed
     private bool isKnocked;                             // Stops moving while being knocked back
-    public float GetSpeed { get { return speed; } }     // Return speed
+    private float GetSpeed { get { return currentStats.maxSpeed; } }     // Return speed
     public int Alliance { get; set; }                   // Alliance of this unit
     public int Xindex { get; set; }                     // On which lane this unit is
     public int Zindex { get; set; }                     // Each unit in lane gets a Zindex to identify it
-    public bool IsAlive { get { return hp > 0; } set { if (maxHp > 0) { hp = maxHp; } } } // Is this unit alive or set it alive
+    public bool IsAlive
+    {
+        get { return currentStats.hp > 0; }
+        set { if (currentStats.MaxHp > 0) currentStats.hp = currentStats.MaxHp; }
+    }  // Is this unit alive or set it alive
 
     #region Start/Update
     private void Start()
     {
         manager = GameController.Instance;
         pooler = ObjectPooler.Instance;
-        UnitName = unitName;
-        maxHp = hp;
-        movement = speed;
+        UnitName = currentStats.unitName;
+        currentStats.MaxHp = currentStats.hp;
+        currentSpeed = currentStats.maxSpeed;
         // Stop moving at the beginning
         SetMoving(false);
         // Set attack index to random index or to a specific index
         startingAttackIndex = selectedAttackIndex;
-        SetAttack();
+        OnUnitSpawn();
         // Get the total weight of all of the movesets
         for (int i = 0; i < moveSet.Length; i++)
         {
@@ -99,6 +77,14 @@ public class UnitController : MonoBehaviour
             moveSet[i].minSelectWeightRange = totalAttackSelectWeight - moveSet[i].selectWeight;
             moveSet[i].maxSelectWeightRange = totalAttackSelectWeight;
         }
+
+        baseStats = currentStats;
+    }
+
+    public void OnUnitSpawn()
+    {
+        anim.SetFloat("attack_speed", currentStats.attack_speed);
+        SetAttack();
     }
 
     private void FixedUpdate()
@@ -121,7 +107,7 @@ public class UnitController : MonoBehaviour
         // Attack if possible
         if (shouldAttack)
         {
-            if (attack_timer > attack_speed)
+            if (attack_timer > currentStats.attack_delay)
             {
                 anim.SetBool("attack", true);
                 attack_timer = 0f;
@@ -149,7 +135,7 @@ public class UnitController : MonoBehaviour
         if (isKnocked)
         {
             anim.SetBool("walk", false);
-            speed = 0f;
+            currentSpeed = 0f;
             return;
         }
 
@@ -158,16 +144,16 @@ public class UnitController : MonoBehaviour
         if (value)
         {
             // Altered movement is based on the ally in front of this unit if it's slower
-            if (alteredMovement > 0)
-                speed = alteredMovement;
+            if (alteredSpeed > 0)
+                currentSpeed = alteredSpeed;
             else
-                speed = movement;
+                currentSpeed = currentStats.maxSpeed;
 
-            anim.SetFloat("walking_speed", speed);
+            anim.SetFloat("walking_speed", currentSpeed);
         }
         else
         {
-            speed = 0f;
+            currentSpeed = 0f;
         }
     }
 
@@ -180,7 +166,7 @@ public class UnitController : MonoBehaviour
         if (isKnocked)
             return;
 
-        transform.position += speed * Time.fixedDeltaTime * transform.forward;
+        transform.position += currentSpeed * Time.fixedDeltaTime * transform.forward;
     }
 
     /// <summary>
@@ -191,8 +177,8 @@ public class UnitController : MonoBehaviour
         // Returns an array of units in front of this unit
         // This arrays length is maxtargets + 1 and the first value will be ally or null
         targets = manager.CheckEnemy(transform.position,
-            transform.position + transform.forward * attack_range,
-            transform.position + transform.forward * stop_range,
+            transform.position + transform.forward * currentStats.attack_range,
+            transform.position + transform.forward * currentStats.stop_range,
             Alliance,
             Xindex,
             Zindex,
@@ -224,13 +210,13 @@ public class UnitController : MonoBehaviour
                 foundStopRangeTarget = true;
                 followTarget = target.Target;
 
-                if (target.Alliance == Alliance && target.Target.GetSpeed < movement)
+                if (target.Alliance == Alliance && target.Target.GetSpeed < currentSpeed)
                 {
-                    alteredMovement = target.Target.GetSpeed;
+                    alteredSpeed = target.Target.GetSpeed;
                 }
                 else
                 {
-                    alteredMovement = 0;
+                    alteredSpeed = 0;
                 }
             }
         }
@@ -239,7 +225,7 @@ public class UnitController : MonoBehaviour
         {
             if (!followTarget.IsAlive)
             {
-                alteredMovement = 0f;
+                alteredSpeed = 0f;
                 followTarget = null;
             }
         }
@@ -252,7 +238,7 @@ public class UnitController : MonoBehaviour
             // If no enemies where found, then set disableTopLayer true to disable top layer after next attack
             disableTopLayer = true;
             // Distance to closest enemy will be changed to max range to pick correct attack
-            distanceToClosestEnemy = attack_range;
+            distanceToClosestEnemy = currentStats.attack_range;
         }
 
         // Stop movement if the current attack is set so
@@ -291,7 +277,6 @@ public class UnitController : MonoBehaviour
     {
         // Iterate through targets with the current attack and apply damage
         AttackType attack = moveSet[selectedAttackIndex];
-        float damage = attack.damage * damageUpgradeMultiplier * damageMultiplier + flatDamage + upgradeFlatUpgrade;
         foreach (TargetInRange target in targets)
         {
             if (target == null)
@@ -299,14 +284,14 @@ public class UnitController : MonoBehaviour
 
             if (target.Alliance != Alliance)
             {
-                if (useProjectile) // Check if it's a ranged unit with a projectile. Create projectile and apply damage in delay
+                if (currentStats.useProjectile) // Check if it's a ranged unit with a projectile. Create projectile and apply damage in delay
                 {
                     gun.ShootGun(target.Target.transform.position);
-                    StartCoroutine(AttackWithDelay(target, damage, attack.attackType, target.DistanceToTarget / gun.Lazer_speed));
+                    StartCoroutine(AttackWithDelay(target, attack.damage, attack.attackType, target.DistanceToTarget / gun.Lazer_speed));
                 }
                 else
                 {
-                    target.Target.TakeDamage(damage, attack.attackType);
+                    target.Target.TakeDamage(attack.damage, attack.attackType);
                 }
             }
         }
@@ -361,11 +346,6 @@ public class UnitController : MonoBehaviour
             }
         }
 
-        //if (UnitName.Equals("spear") && Alliance == 1)
-        //{
-        //    Debug.Log(selectedAttackIndex + ", " + distanceToClosestEnemy + ", " + hasSelected);
-        //}
-
         // Set the selected attack index in the animator
         anim.SetFloat("attackType", selectedAttackIndex);
 
@@ -391,7 +371,7 @@ public class UnitController : MonoBehaviour
     {
         if (randomIndexAtStart)
         {
-            distanceToClosestEnemy = attack_range;
+            distanceToClosestEnemy = currentStats.attack_range;
             OnAttackEnd();
         }
         else
@@ -414,14 +394,14 @@ public class UnitController : MonoBehaviour
         // Get the multiplier for this attack type
         var multiplier = damageType switch
         {
-            "thurst" => GetDamageModifier(thrustArmor),
-            "blunt" => GetDamageModifier(bluntArmor),
-            "special" => GetDamageModifier(specialArmor),
-            _ => GetDamageModifier(slashArmor),
+            "thurst" => GetDamageModifier(currentStats.thrustArmor),
+            "blunt" => GetDamageModifier(currentStats.bluntArmor),
+            "special" => GetDamageModifier(currentStats.specialArmor),
+            _ => GetDamageModifier(currentStats.slashArmor),
         };
         // Calculate damage and take damage
         float damage = amount * Random.Range(0.95f, 1.06f) * multiplier;
-        hp -= damage;
+        currentStats.hp -= damage;
 
         pooler.GetPooledObject("sparks", transform.position);
 
@@ -429,7 +409,7 @@ public class UnitController : MonoBehaviour
         StartCoroutine(ApplyKnockBack(damage * 0.017f));
 
         // Is this units hp falls below 0, it dies
-        if (hp <= 0)
+        if (currentStats.hp <= 0)
         {
             anim.SetTrigger("die");
             SetMoving(false);
@@ -443,8 +423,7 @@ public class UnitController : MonoBehaviour
     /// <returns></returns>
     private float GetDamageModifier(float armorValue)
     {
-        float changedArmor = armorValue * armorMultiplier + flatArmor;
-        return 1 - (changedArmor / (40 + Mathf.Abs(changedArmor)));
+        return 1 - (armorValue / (40 + Mathf.Abs(armorValue)));
     }
 
     /// <summary>
@@ -475,7 +454,7 @@ public class UnitController : MonoBehaviour
         Xindex = -1;
         Zindex = -1;
         anim.SetLayerWeight(1, 0f);
-        alteredMovement = 0;
+        alteredSpeed = 0;
         SetAttack();
     }
 
@@ -488,43 +467,41 @@ public class UnitController : MonoBehaviour
         gameObject.SetActive(false);
     }
     #endregion
+    #region Upgrade
+
     public void AddUpgrades(Upgrade[] newUpgrades)
     {
-        foreach (Upgrade newUpgrade in newUpgrades)
+        foreach (Upgrade upgrade in newUpgrades)
         {
-            if (!validUpgradeNames.Contains(newUpgrade.upgradeName))
-            {
-                continue; // Skip invalid upgrades
-            }
-
-
-            if (validUpgrades.ContainsKey(newUpgrade.upgradeName))
-            {
-                validUpgrades[newUpgrade.upgradeName] = newUpgrade; // Overwrite the existing upgrade
-            }
-            else
-            {
-                validUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
-            }
+            AddUpgrade(upgrade);
         }
     }
 
-    public float GetUpgradeFlat(string upgradeName)
+    public void AddUpgrade(Upgrade newUpgrade)
     {
-        if (validUpgrades.TryGetValue(upgradeName, out Upgrade upgrade))
+        if (!validUpgradeNames.Contains(newUpgrade.upgradeName))
         {
-            return upgrade.upgradeFlat;
+            return; // Skip invalid upgrades
         }
 
-        return 0; // Upgrade not found
+        if (appliedUpgrades.ContainsKey(newUpgrade.upgradeName))
+        {
+            appliedUpgrades[newUpgrade.upgradeName] = newUpgrade; // Overwrite the existing upgrade
+        }
+        else
+        {
+            appliedUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
+        }
     }
-    public float GetUpgradeMultiplier(string upgradeName)
+
+    private void ApplyUpgrades()
     {
-        if (validUpgrades.TryGetValue(upgradeName, out Upgrade upgrade))
-        {
-            return upgrade.upgradeMultiplier;
-        }
 
-        return 1; // Upgrade not found
     }
+
+    public void ResetUpgrades()
+    {
+        appliedUpgrades.Clear();
+    }
+    #endregion
 }
