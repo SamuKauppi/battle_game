@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5771,104 +5771,152 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.size
-      value: 2
+      propertyPath: availabeUpgrades.Array.size
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.humanPlayers.Array.size
+      propertyPath: availabeUpgrades.Array.data[0].upgradeFlat
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[0].upgradeName
+      value: shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[1].upgradeFlat
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[1].upgradeName
+      value: speed
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[2].upgradeFlat
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[2].upgradeName
+      value: dual
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[3].upgradeFlat
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[3].upgradeName
+      value: heavy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[4].upgradeFlat
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[4].upgradeName
+      value: sharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[5].upgradeFlat
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].logoIndex
-      value: 4
+      propertyPath: availabeUpgrades.Array.data[5].upgradeName
+      value: long
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].slotIndex
-      value: 0
+      propertyPath: availabeUpgrades.Array.data[6].upgradeFlat
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].mainColor.b
+      propertyPath: availabeUpgrades.Array.data[6].upgradeName
+      value: staff
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[7].upgradeFlat
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[7].upgradeName
+      value: damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[8].upgradeFlat
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[8].upgradeName
+      value: durability
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[9].upgradeFlat
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[9].upgradeName
+      value: swift
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[0].upgradeLevel
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].mainColor.g
-      value: 0.045587063
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].mainColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.g
-      value: 0.061854143
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].mainColor.r
+      propertyPath: availabeUpgrades.Array.data[1].upgradeLevel
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].detailColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].detailColor.g
-      value: 0.9161035
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].detailColor.r
+      propertyPath: availabeUpgrades.Array.data[2].upgradeLevel
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].detailColor.g
-      value: 0.9786632
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].detailColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].highlightColor.b
-      value: 0.5568628
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].units.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].highlightColor.b
-      value: 0.55701256
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].highlightColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].highlightColor.r
+      propertyPath: availabeUpgrades.Array.data[3].upgradeLevel
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].units.Array.size
-      value: 4
+      propertyPath: availabeUpgrades.Array.data[4].upgradeLevel
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].units.Array.data[0]
-      value: scythe
+      propertyPath: availabeUpgrades.Array.data[5].upgradeLevel
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[0].units.Array.data[3]
-      value: mace
+      propertyPath: availabeUpgrades.Array.data[6].upgradeLevel
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].units.Array.data[0]
-      value: scythe
+      propertyPath: availabeUpgrades.Array.data[7].upgradeLevel
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
-      propertyPath: gameProperties.aiPlayers.Array.data[1].units.Array.data[3]
-      value: mace
+      propertyPath: availabeUpgrades.Array.data[8].upgradeLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[9].upgradeLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[1].upgradeMultiplier
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[2].upgradeMultiplier
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[5].upgradeMultiplier
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[7].upgradeMultiplier
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[8].upgradeMultiplier
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362839828277640203, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
+      propertyPath: availabeUpgrades.Array.data[9].upgradeMultiplier
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 8362839828277640206, guid: c0f84b307690de6439d48ba2e9d93a51, type: 3}
       propertyPath: m_Name

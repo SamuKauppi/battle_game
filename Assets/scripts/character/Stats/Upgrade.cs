@@ -10,7 +10,7 @@ public class Upgrade
     }
 
     public string upgradeName;
-    public float upgradeFlat;
-    public float upgradeMultiplier;
+    public float upgradeFlat = 0f;
+    public float upgradeMultiplier = 1f;
     public int upgradeLevel = 1;
 }
