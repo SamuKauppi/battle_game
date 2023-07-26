@@ -253,3 +253,100 @@ MonoBehaviour:
     pickImage: {fileID: 0}
     pickSlider: {fileID: 0}
     rectPosition: {fileID: 0}
+  availabeUpgrades:
+  - upgradeName: shield
+    statsAffected:
+    - statAffected: armor
+      modificationType: flat
+      amount: 10
+    - statAffected: damage
+      modificationType: flat
+      amount: 10
+    upgradeLevel: 1
+  - upgradeName: speed
+    statsAffected:
+    - statAffected: delay
+      modificationType: flat
+      amount: -0.05
+    - statAffected: as
+      modificationType: multi
+      amount: 1.1
+    - statAffected: speed
+      modificationType: multi
+      amount: 1.1
+    upgradeLevel: 1
+  - upgradeName: dual
+    statsAffected:
+    - statAffected: damage
+      modificationType: flat
+      amount: 5
+    - statAffected: as
+      modificationType: multi
+      amount: 1.1
+    - statAffected: armor
+      modificationType: flat
+      amount: 5
+    upgradeLevel: 1
+  - upgradeName: heavy
+    statsAffected:
+    - statAffected: armor
+      modificationType: flat
+      amount: 10
+    - statAffected: hp
+      modificationType: flat
+      amount: 10
+    upgradeLevel: 1
+  - upgradeName: sharp
+    statsAffected:
+    - statAffected: damage
+      modificationType: flat
+      amount: 10
+    - statAffected: damage
+      modificationType: multi
+      amount: 1.1
+    upgradeLevel: 1
+  - upgradeName: reach
+    statsAffected:
+    - statAffected: range
+      modificationType: multi
+      amount: 1.1
+    - statAffected: damage
+      modificationType: flat
+      amount: 10
+    upgradeLevel: 1
+  - upgradeName: staff
+    statsAffected:
+    - statAffected: armor
+      modificationType: flat
+      amount: 10
+    - statAffected: damage
+      modificationType: 10
+      amount: 0
+    upgradeLevel: 1
+  - upgradeName: damage
+    statsAffected:
+    - statAffected: damage
+      modificationType: flat
+      amount: 2
+    - statAffected: as
+      modificationType: multi
+      amount: 1.02
+    upgradeLevel: 1
+  - upgradeName: durability
+    statsAffected:
+    - statAffected: hp
+      modificationType: multi
+      amount: 1.02
+    - statAffected: armor
+      modificationType: flat
+      amount: 10
+    upgradeLevel: 1
+  - upgradeName: swift
+    statsAffected:
+    - statAffected: speed
+      modificationType: multi
+      amount: 1.02
+    - statAffected: delay
+      modificationType: flat
+      amount: -0.02
+    upgradeLevel: 1

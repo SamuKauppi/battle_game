@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -277,22 +278,25 @@ public class UnitController : MonoBehaviour
     {
         // Iterate through targets with the current attack and apply damage
         AttackType attack = moveSet[selectedAttackIndex];
+        float damage = attack.damage * currentStats.DamageMultiplier + currentStats.FlatDamage;
         foreach (TargetInRange target in targets)
         {
             if (target == null)
                 continue;
 
-            if (target.Alliance != Alliance)
+            if (target.Alliance == Alliance)
             {
-                if (currentStats.useProjectile) // Check if it's a ranged unit with a projectile. Create projectile and apply damage in delay
-                {
-                    gun.ShootGun(target.Target.transform.position);
-                    StartCoroutine(AttackWithDelay(target, attack.damage, attack.attackType, target.DistanceToTarget / gun.Lazer_speed));
-                }
-                else
-                {
-                    target.Target.TakeDamage(attack.damage, attack.attackType);
-                }
+                continue;
+            }
+
+            if (currentStats.useProjectile) // Check if it's a ranged unit with a projectile. Create projectile and apply damage in delay
+            {
+                gun.ShootGun(target.Target.transform.position);
+                StartCoroutine(AttackWithDelay(target, damage, attack.attackType, target.DistanceToTarget / gun.Lazer_speed));
+            }
+            else
+            {
+                target.Target.TakeDamage(damage, attack.attackType);
             }
         }
     }
@@ -391,16 +395,23 @@ public class UnitController : MonoBehaviour
         if (!IsAlive)
             return;
 
-        // Get the multiplier for this attack type
-        var multiplier = damageType switch
+        // Define the armor type based on the damage type
+        float armorType = damageType switch
         {
-            "thurst" => GetDamageModifier(currentStats.thrustArmor),
-            "blunt" => GetDamageModifier(currentStats.bluntArmor),
-            "special" => GetDamageModifier(currentStats.specialArmor),
-            _ => GetDamageModifier(currentStats.slashArmor),
+            "thurst" => currentStats.thrustArmor,
+            "blunt" => currentStats.bluntArmor,
+            "special" => currentStats.specialArmor,
+            _ => currentStats.slashArmor,
         };
+
+        // Calculate the total armor value with multipliers and flat armor
+        float totalArmor = armorType * currentStats.ArmorMultiplier + currentStats.FlatArmor;
+
+        // Get the multiplier for this attack type
+        float resistanceMultiplier = GetDamageModifier(totalArmor);
+
         // Calculate damage and take damage
-        float damage = amount * Random.Range(0.95f, 1.06f) * multiplier;
+        float damage = amount * Random.Range(0.95f, 1.06f) * resistanceMultiplier;
         currentStats.hp -= damage;
 
         pooler.GetPooledObject("sparks", transform.position);
@@ -481,6 +492,7 @@ public class UnitController : MonoBehaviour
     {
         if (!validUpgradeNames.Contains(newUpgrade.upgradeName))
         {
+            Debug.Log(UnitName + " does not have upgrade: " + newUpgrade.upgradeName);
             return; // Skip invalid upgrades
         }
 
@@ -492,11 +504,6 @@ public class UnitController : MonoBehaviour
         {
             appliedUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
         }
-    }
-
-    private void ApplyUpgrades()
-    {
-
     }
 
     public void ResetUpgrades()
