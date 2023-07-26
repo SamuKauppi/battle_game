@@ -9,5 +9,5 @@ public abstract class PlayerDataTransferClass
     public Color detailColor;
     public Color highlightColor;
     public string[] units;
-    public Upgrade[] upgrades;
+    public UpgradeTransfer[] upgrades;
 }

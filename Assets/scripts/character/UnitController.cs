@@ -27,6 +27,7 @@ public class UnitController : MonoBehaviour
     private Stats baseStats;                                                // Used to store the base stats for resetting
     [SerializeField] private string[] validUpgradeNames;                    // Upgrade names that affect this unit
     private readonly Dictionary<string, Upgrade> appliedUpgrades = new();   // Upgrades applied to this unit
+    private bool isAddingMultipleUpgrades;                                  // Prevents applying multiple modifiers when upgrading
 
     // Attaks
     [SerializeField] private int selectedAttackIndex;   // Current attack selected
@@ -405,7 +406,7 @@ public class UnitController : MonoBehaviour
         };
 
         // Calculate the total armor value with multipliers and flat armor
-        float totalArmor = armorType * currentStats.ArmorMultiplier + currentStats.FlatArmor;
+        float totalArmor = armorType;
 
         // Get the multiplier for this attack type
         float resistanceMultiplier = GetDamageModifier(totalArmor);
@@ -482,10 +483,13 @@ public class UnitController : MonoBehaviour
 
     public void AddUpgrades(Upgrade[] newUpgrades)
     {
+        isAddingMultipleUpgrades = true;
         foreach (Upgrade upgrade in newUpgrades)
         {
             AddUpgrade(upgrade);
         }
+        isAddingMultipleUpgrades = false;
+        ApplyUpgrades();
     }
 
     public void AddUpgrade(Upgrade newUpgrade)
@@ -504,7 +508,104 @@ public class UnitController : MonoBehaviour
         {
             appliedUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
         }
+
+        if (!isAddingMultipleUpgrades)
+        {
+            ApplyUpgrades();
+        }
     }
+
+    public void ApplyUpgrades()
+    {
+        currentStats = baseStats;
+        Dictionary<(string, string), float> statModifications = CalculateStatModifications();
+
+        foreach (KeyValuePair<(string, string), float> statMod in statModifications)
+        {
+            switch (statMod.Key.Item1)
+            {
+
+                case "damage":
+                    if (statMod.Key.Item2.Equals("multi"))
+                    {
+                        currentStats.DamageMultiplier = PerformOperation(currentStats.DamageMultiplier,
+                            statMod.Value, statMod.Key.Item2);
+                    }
+                    else
+                    {
+                        currentStats.FlatDamage = PerformOperation(currentStats.FlatDamage,
+                            statMod.Value, statMod.Key.Item2);
+                    }
+                    break;
+                case "range":
+                    currentStats.attack_range = PerformOperation(currentStats.attack_range,
+                        statMod.Value, statMod.Key.Item2);
+                    break;
+                case "delay":
+                    currentStats.attack_delay = PerformOperation(currentStats.attack_delay,
+                        statMod.Value, statMod.Key.Item2);
+                    break;
+                case "as":
+                    currentStats.attack_speed = PerformOperation(currentStats.attack_speed,
+                        statMod.Value, statMod.Key.Item2);
+                    break;
+                case "speed":
+                    currentStats.maxSpeed = PerformOperation(currentStats.maxSpeed,
+                        statMod.Value, statMod.Key.Item2);
+                    break;
+                case "hp":
+                    currentStats.hp = PerformOperation(currentStats.hp,
+                        statMod.Value, statMod.Key.Item2);
+                    break;
+                default:
+                    currentStats.slashArmor = PerformOperation(currentStats.slashArmor,
+                        statMod.Value, statMod.Key.Item2);
+                    currentStats.thrustArmor = PerformOperation(currentStats.thrustArmor,
+                        statMod.Value, statMod.Key.Item2);
+                    currentStats.bluntArmor = PerformOperation(currentStats.bluntArmor,
+                        statMod.Value, statMod.Key.Item2);
+                    currentStats.specialArmor = PerformOperation(currentStats.specialArmor,
+                        statMod.Value, statMod.Key.Item2);
+                    break;
+            }
+        }
+    }
+
+    private Dictionary<(string, string), float> CalculateStatModifications()
+    {
+        Dictionary<(string, string), float> statModifications = new();
+        foreach (KeyValuePair<string, Upgrade> upgrade in appliedUpgrades)
+        {
+            foreach (KeyValuePair<(string, string), StatModification> statMod in upgrade.Value.statsAffectedDict)
+            {
+                if (statModifications.TryGetValue(statMod.Key, out float amount))
+                {
+                    statModifications[statMod.Key] = amount + statMod.Value.amount;
+                }
+                else
+                {
+                    statModifications.Add(statMod.Key, statMod.Value.amount);
+                }
+            }
+        }
+        return statModifications;
+    }
+
+
+    private float PerformOperation(float value1, float value2, string type)
+    {
+        switch (type)
+        {
+            case "multi":
+                return value1 * value2;
+            case "add":
+                return value1 + value2;
+            default:
+                Debug.Log(type + " was not found!");
+                return value1;
+        }
+    }
+
 
     public void ResetUpgrades()
     {

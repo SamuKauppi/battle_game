@@ -19,7 +19,4 @@ public class Stats
     public float thrustArmor = 10f;
     public float bluntArmor = 10f;
     public float specialArmor = 10f;
-
-    public float FlatArmor { get; set; } = 0f;
-    public float ArmorMultiplier { get; set; } = 1f;
 }
