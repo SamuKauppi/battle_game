@@ -94,8 +94,8 @@ public class GameController : MonoBehaviour
             playerQualities = aiPlayer;
         }
 
-        Upgrade[] playerUpgrades = UpgradeManager.Instance.GetUpgrades(player.upgrades);
-        Ability[] playerAbilities = AbilityManager.Instance.GetAbilities(player.ablilites);
+        Upgrade[] playerUpgrades = pManager.upgradeManager.GetUpgrades(player.upgrades);
+        Ability[] playerAbilities = pManager.abilityManager.GetAbilities(player.ablilites);
 
         playerQualities.SetPlayerProperties(player.Alliance, player.slotIndex, player.logoIndex, player.mainColor, player.detailColor,
             player.highlightColor, player.units, matManager, playerUpgrades, playerAbilities);
@@ -213,7 +213,7 @@ public class GameController : MonoBehaviour
                 continue; // target is dead and will be removed
             }
 
-            if (Mathf.Abs(target.transform.position.z) > 13f)
+            if (Mathf.Abs(target.transform.position.z) > 12.5f)
             {
                 target.TakeDamage(1000000, "");
                 lanes[Xindex].units.RemoveAt(i);

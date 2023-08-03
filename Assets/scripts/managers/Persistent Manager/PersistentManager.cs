@@ -4,6 +4,9 @@ public class PersistentManager : MonoBehaviour
 {
     public static PersistentManager Instance { get; private set; }
 
+    public UpgradeManager upgradeManager;
+    public AbilityManager abilityManager;
+
     public GameTransferClass gameProperties;
     public StringArray[] aiUnitCountering;
     // All of the Unit countering data just in case I lose them

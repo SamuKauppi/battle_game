@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class AbilityManager : MonoBehaviour
 {
-    public static AbilityManager Instance;
     private Ability[] abilities;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
     private void Start()
     {
-        abilities = PersistentManager.Instance.availableAbilities;
+        abilities = GetAbilities();
     }
 
+    private Ability[] GetAbilities()
+    {
+        return PersistentManager.Instance.availableAbilities;
+    }
     public Ability[] GetAbilities(string[] abilityNames)
     {
         List<Ability> abilityList = new();
         _ = abilityNames.ToHashSet();
+
+        abilities ??= GetAbilities();
+
         foreach (Ability ability in abilities)
         {
             if (abilityNames.Contains(ability.ablityTag))
@@ -27,6 +29,6 @@ public class AbilityManager : MonoBehaviour
                 abilityList.Add(ability);
             }
         }
-        return abilityList.ToArray();   
+        return abilityList.ToArray();
     }
 }

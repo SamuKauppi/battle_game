@@ -5,12 +5,10 @@ using UnityEngine;
 public class UpgradeManager : MonoBehaviour
 {
     private PersistentManager manager;
-    public static UpgradeManager Instance { get; private set; }
 
     private void Start()
     {
         manager = PersistentManager.Instance;
-        Instance = this;
 
         foreach (Upgrade upgrade in manager.availableUpgrades)
         {

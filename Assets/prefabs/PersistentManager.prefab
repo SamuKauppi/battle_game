@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6559595d734355e4ca162f2da470cfa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilities: []
 --- !u!1 &8362839826387592397
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,6 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96af95eeec1454241a3f985dd2fd1689, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeManager: {fileID: 8277256154100936539}
+  abilityManager: {fileID: 6522005740528195906}
   gameProperties:
     humanPlayers:
     - Alliance: 1
