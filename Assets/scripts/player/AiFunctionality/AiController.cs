@@ -25,7 +25,7 @@ public class AiController : PlayerController
     // Unit-related variables
     private int desiredUnitIndex = 0;                   // What Unit the AI wants to spawn next
 
-    private bool isComboing;                            // Is the AI currently performing a combo
+    [SerializeField] private bool isComboing;                            // Is the AI currently performing a combo
     private int comboIndex;                             // Which combo is the AI performing
     private int comboCount;                             // How far is the AI in the combo
 
@@ -74,6 +74,7 @@ public class AiController : PlayerController
         CheckPosInput();
         CheckUnitInput();
         CheckSpawn();
+        CheckAbilities();
     }
 
     public override void OnUnitSpawn()

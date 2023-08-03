@@ -1,5 +1,93 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6171925391686884369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5616254065625311085}
+  - component: {fileID: 8277256154100936539}
+  m_Layer: 0
+  m_Name: UpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5616254065625311085
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6171925391686884369}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8362839828277640200}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8277256154100936539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6171925391686884369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3412d658bc80e5349b2c0771345bb8c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &6600096925296711401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6325022401360206562}
+  - component: {fileID: 6522005740528195906}
+  m_Layer: 0
+  m_Name: AbilityManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6325022401360206562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6600096925296711401}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8362839828277640200}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6522005740528195906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6600096925296711401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6559595d734355e4ca162f2da470cfa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8362839826387592397
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,6 +162,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8362839826387592396}
+  - {fileID: 5616254065625311085}
+  - {fileID: 6325022401360206562}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -94,47 +184,42 @@ MonoBehaviour:
     - Alliance: 1
       slotIndex: 0
       logoIndex: 8
-      mainColor: {r: 0.6037736, g: 0.33891064, b: 0.33891064, a: 1}
+      mainColor: {r: 0, g: 0, b: 0, a: 0}
       detailColor: {r: 1, g: 0, b: 0, a: 0}
-      highlightColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 0}
+      highlightColor: {r: 0.2967633, g: 1, b: 0, a: 0}
       units:
       - sword
       - spear
+      - axe
+      - mace
+      - scout
       - gun
+      - halberd
       upgrades: []
+      ablilites:
+      - double
+      - convert
+      - column
+      - production
+      - upgrade
     aiPlayers:
     - Alliance: -1
       slotIndex: 1
       logoIndex: 6
-      mainColor: {r: 0.34931722, g: 0.6037736, b: 0.3275187, a: 0}
-      detailColor: {r: 0.73903704, g: 0, b: 1, a: 0}
+      mainColor: {r: 0.07066631, g: 0, b: 1, a: 0}
+      detailColor: {r: 0.57500184, g: 1, b: 0, a: 0}
       highlightColor: {r: 1, g: 0, b: 0, a: 0}
       units:
       - sword
       - spear
+      - axe
+      - mace
+      - scout
       - gun
+      - halberd
       upgrades: []
-      aiPlayerCombos:
-      - array:
-        - scythe
-        - spear
-        - gun
-        - gun
-      - array:
-        - sword
-        - spear
-        - gun
-      - array:
-        - scythe
-        - spear
-        - axe
-      - array:
-        - sword
-        - axe
-        - axe
-      - array:
-        - axe
-        - spear
+      ablilites: []
+      aiPlayerCombos: []
       emerencyDist: 4.5
     map: {fileID: 0}
     roundTime: 210
@@ -142,7 +227,7 @@ MonoBehaviour:
   - array:
     - sword
     - mace
-    - scythe
+    - halberd
     - sword
     - axe
     - scout
@@ -163,12 +248,12 @@ MonoBehaviour:
     - gun
     - axe
     - mace
-    - scythe
+    - halberd
     - sword
     - scout
   - array:
-    - scythe
-    - scythe
+    - halberd
+    - halberd
     - spear
     - sword
     - gun
@@ -179,7 +264,7 @@ MonoBehaviour:
     - scout
     - mace
     - sword
-    - scythe
+    - halberd
     - axe
     - scout
     - spear
@@ -191,7 +276,7 @@ MonoBehaviour:
     - spear
     - sword
     - mace
-    - scythe
+    - halberd
     - gun
   - array:
     - axe
@@ -200,7 +285,7 @@ MonoBehaviour:
     - scout
     - spear
     - axe
-    - scythe
+    - halberd
     - sword
   loader: {fileID: 8362839826387592399}
   avaiableUnits:
@@ -246,14 +331,14 @@ MonoBehaviour:
     pickImage: {fileID: 0}
     pickSlider: {fileID: 0}
     rectPosition: {fileID: 0}
-  - unitName: scythe
+  - unitName: halberd
     spawnTime: 3.5
     pickSpirte: {fileID: 21300000, guid: dcf547aecdf22f84a94da88bf3c97669, type: 3}
     aiComboSortLayer: 0
     pickImage: {fileID: 0}
     pickSlider: {fileID: 0}
     rectPosition: {fileID: 0}
-  availabeUpgrades:
+  availableUpgrades:
   - upgradeName: shield
     statsAffected:
     - statAffected: armor
@@ -263,7 +348,7 @@ MonoBehaviour:
       modificationType: flat
       amount: 10
     upgradeLevel: 1
-  - upgradeName: speed
+  - upgradeName: swift
     statsAffected:
     - statAffected: delay
       modificationType: flat
@@ -273,7 +358,7 @@ MonoBehaviour:
       amount: 0.1
     - statAffected: speed
       modificationType: multi
-      amount: 0.1
+      amount: 0.05
     upgradeLevel: 1
   - upgradeName: dual
     statsAffected:
@@ -309,7 +394,7 @@ MonoBehaviour:
     statsAffected:
     - statAffected: range
       modificationType: multi
-      amount: 0.1
+      amount: 1.1
     - statAffected: damage
       modificationType: flat
       amount: 10
@@ -320,33 +405,76 @@ MonoBehaviour:
       modificationType: flat
       amount: 10
     - statAffected: damage
-      modificationType: 10
-      amount: 0
+      modificationType: multi
+      amount: 10
     upgradeLevel: 1
   - upgradeName: damage
     statsAffected:
     - statAffected: damage
       modificationType: flat
       amount: 2
-    - statAffected: as
+    - statAffected: damage
       modificationType: multi
-      amount: 0.02
+      amount: 0.01
+    upgradeLevel: 1
+  - upgradeName: health
+    statsAffected:
+    - statAffected: hp
+      modificationType: flat
+      amount: 10
+    - statAffected: hp
+      modificationType: multi
+      amount: 0.01
     upgradeLevel: 1
   - upgradeName: durability
     statsAffected:
-    - statAffected: hp
-      modificationType: multi
-      amount: 0.02
     - statAffected: armor
       modificationType: flat
       amount: 10
+    - statAffected: armor
+      modificationType: multi
+      amount: 0.01
     upgradeLevel: 1
-  - upgradeName: swift
+  - upgradeName: speed
     statsAffected:
     - statAffected: speed
       modificationType: multi
       amount: 0.02
-    - statAffected: delay
-      modificationType: flat
-      amount: -0.02
     upgradeLevel: 1
+  - upgradeName: attack speed
+    statsAffected:
+    - statAffected: as
+      modificationType: multi
+      amount: 0.02
+    upgradeLevel: 1
+  availableAbilities:
+  - ablityTag: double
+    abilityName: Double Summon
+    abilityDescription: Spawn another unit instantly
+    cooldown: 10
+    duration: 0
+    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
+  - ablityTag: convert
+    abilityName: Convert
+    abilityDescription: Convert closest enemy unit from a row to your side
+    cooldown: 20
+    duration: 0
+    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
+  - ablityTag: column
+    abilityName: Column Formation
+    abilityDescription: Your next unit will spawn in every lane
+    cooldown: 30
+    duration: 0
+    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
+  - ablityTag: production
+    abilityName: Faster Production
+    abilityDescription: Faster unit production for 10 seconds
+    cooldown: 30
+    duration: 10
+    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
+  - ablityTag: upgrade
+    abilityName: Random Upgrade
+    abilityDescription: Give random upgrades to units when they spawn
+    cooldown: 0
+    duration: 0
+    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}

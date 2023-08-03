@@ -28,8 +28,30 @@ public class HumanController : PlayerController
             UnitInput = 1;
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ActivateAbility(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ActivateAbility(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ActivateAbility(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ActivateAbility(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            ActivateAbility(4);
+        }
+
         CheckPosInput();
         CheckUnitInput();
         CheckSpawn();
+        CheckAbilities();
     }
 }

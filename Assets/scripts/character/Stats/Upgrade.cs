@@ -5,11 +5,11 @@ public class Upgrade
 {
     public string upgradeName;
     public StatModification[] statsAffected;
-    public Dictionary<(string, string), StatModification> statsAffectedDict;
+    public Dictionary<(string, string), StatModification> statsAffectedDict = new();
     public int upgradeLevel = 1;
 
 
-    public void InitilizeDict()
+    public void InitializeDictionary()
     {
         foreach (StatModification statModification in statsAffected)
         {

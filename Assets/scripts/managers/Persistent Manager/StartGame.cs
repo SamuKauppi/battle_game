@@ -27,13 +27,11 @@ public class StartGame : MonoBehaviour
     private void Start()
     {
         gameData = PersistentManager.Instance.gameProperties;
-
+        bool alliance1CountEdited = false;
+        bool alliance2CountEdited = false;
         foreach (PlayerSettings player in players)
         {
             int playerSlotIndex = player.playerSlotIndex;
-            bool alliance1CountEdited = false;
-            bool alliance2CountEdited = false;
-
             foreach (PlayerDataTransferClass transferData in gameData.humanPlayers.Concat<PlayerDataTransferClass>(gameData.aiPlayers))
             {
                 if (playerSlotIndex == transferData.slotIndex)
@@ -55,6 +53,7 @@ public class StartGame : MonoBehaviour
                         }
                         alliance2CountEdited = true;
                     }
+
                 }
             }
         }
@@ -87,7 +86,7 @@ public class StartGame : MonoBehaviour
         gameData.aiPlayers = new List<AiTransferData>();
         gameData.humanPlayers = new List<HumanPlayerTransfer>();
 
-        foreach (var player in players)
+        foreach (PlayerSettings player in players)
         {
             if (!player.gameObject.activeInHierarchy)
                 continue;
@@ -113,13 +112,14 @@ public class StartGame : MonoBehaviour
                     mainColor = player.teamColors[0].color,
                     detailColor = player.teamColors[1].color,
                     highlightColor = player.teamColors[2].color,
-                    units = units.ToArray()
+                    units = units.ToArray(),
+                    upgrades = player.Upgrades,
+                    ablilites = player.Abilities
                 };
                 gameData.humanPlayers.Add((HumanPlayerTransfer)playerData);
             }
             else
             {
-
                 List<string> reOrderedUnits = new(units);
                 UnitSpawn[] templateUnits = PersistentManager.Instance.avaiableUnits;
 
@@ -129,40 +129,7 @@ public class StartGame : MonoBehaviour
                     return template?.aiComboSortLayer ?? int.MaxValue;
                 }).ToList();
 
-                int numberOfCombos = units.Count * 2;
-                StringArray[] combos = new StringArray[numberOfCombos];
-
-                for (int x = 0; x < combos.Length; x++)
-                {
-                    int numberOfUnitsInCombo = Random.Range(2, 6);
-                    int maxUnitIndex = Mathf.RoundToInt(numberOfUnitsInCombo / 1.1f);
-                    int prevUnitIndex = 0;
-                    int unitIndex = 0;
-                    int unitRepeats = 0;
-                    string[] combo = new string[numberOfUnitsInCombo];
-                    for (int i = 0; i < combo.Length; i++)
-                    {
-                        unitIndex += Random.Range(0, maxUnitIndex);
-                        if (unitRepeats > 1)
-                        {
-                            unitIndex = Random.Range(0, maxUnitIndex);
-                        }
-                        unitIndex = Mathf.Clamp(unitIndex, 0, reOrderedUnits.Count - 1);
-                        if (prevUnitIndex == unitIndex)
-                        {
-                            unitRepeats++;
-                        }
-                        else
-                        {
-                            unitRepeats = 0;
-                        }
-                        prevUnitIndex = unitIndex;
-                        combo[i] = reOrderedUnits[unitIndex];
-                    }
-                    combos[x] = new StringArray { array = combo };
-                }
-
-
+                StringArray[] combos = CreateAiCombos(reOrderedUnits.ToArray(), units.Count);
 
                 playerData = new AiTransferData
                 {
@@ -173,6 +140,8 @@ public class StartGame : MonoBehaviour
                     detailColor = player.teamColors[1].color,
                     highlightColor = player.teamColors[2].color,
                     units = units.ToArray(),
+                    upgrades = player.Upgrades,
+                    ablilites = player.Abilities,
                     aiPlayerCombos = combos
                 };
 
@@ -181,5 +150,49 @@ public class StartGame : MonoBehaviour
         }
 
         PersistentManager.Instance.loader.LoadScene(1);
+    }
+
+    /// <summary>
+    /// Creates combos for Ai player
+    /// </summary>
+    /// <param name="reOrderedUnits"></param>
+    /// <param name="units"></param>
+    /// <returns></returns>
+    private StringArray[] CreateAiCombos(string[] reOrderedUnits, float numberOfUnits) 
+    {
+        // How many combos will the ai have is based on the number of units * x
+        StringArray[] combos = new StringArray[Mathf.RoundToInt(numberOfUnits * 1.5f)];
+
+        for (int x = 0; x < combos.Length; x++)
+        {
+            int numberOfUnitsInCombo = Random.Range(2, 5);
+            int maxUnitIndex = Mathf.RoundToInt(numberOfUnitsInCombo / 1.15f);
+            int prevUnitIndex = 0;
+            int unitIndex = 0;
+            int unitRepeats = 0;
+            string[] combo = new string[numberOfUnitsInCombo];
+            for (int i = 0; i < combo.Length; i++)
+            {
+                unitIndex += Random.Range(0, maxUnitIndex);
+                if (unitRepeats > 1)
+                {
+                    unitIndex = Random.Range(0, maxUnitIndex);
+                }
+                unitIndex = Mathf.Clamp(unitIndex, 0, reOrderedUnits.Length - 1);
+                if (prevUnitIndex == unitIndex)
+                {
+                    unitRepeats++;
+                }
+                else
+                {
+                    unitRepeats = 0;
+                }
+                prevUnitIndex = unitIndex;
+                combo[i] = reOrderedUnits[unitIndex];
+            }
+            combos[x] = new StringArray { array = combo };
+        }
+
+        return combos;
     }
 }

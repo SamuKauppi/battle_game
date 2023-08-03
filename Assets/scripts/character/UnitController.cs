@@ -24,10 +24,10 @@ public class UnitController : MonoBehaviour
     [SerializeField] private Stats currentStats;
 
     // Upgrades
-    private Stats baseStats;                                                // Used to store the base stats for resetting
-    [SerializeField] private string[] validUpgradeNames;                    // Upgrade names that affect this unit
-    private readonly Dictionary<string, Upgrade> appliedUpgrades = new();   // Upgrades applied to this unit
-    private bool isAddingMultipleUpgrades;                                  // Prevents applying multiple modifiers when upgrading
+    private Stats baseStats;                                                        // Used to store the base stats for resetting
+    [SerializeField] private string[] validUpgradeNames;                            // Upgrade names that affect this unit
+    private readonly Dictionary<string, Upgrade> appliedUpgrades = new();           // Upgrades applied to this unit
+    private readonly Dictionary<(string, string), float> statModifications = new(); // Stat modifications that are applied to this unit
 
     // Attaks
     [SerializeField] private int selectedAttackIndex;   // Current attack selected
@@ -36,23 +36,23 @@ public class UnitController : MonoBehaviour
     [SerializeField] private AttackType[] moveSet;      // Moves the unit uses
     private float totalAttackSelectWeight;              // Used for selecting moves based on it's weight value
     private bool disableTopLayer;                       // This prevents top animation layer to be turned off before an attack animation ends
-    [SerializeField] private bool shouldAttack;                          // Should the unit be attacking
+    private bool shouldAttack;                          // Should the unit be attacking
 
     // Targeting
     [SerializeField] private TargetInRange[] targets;   // Targets. Both allies and enemies. Can be null
     private UnitController followTarget;                // Target this unit is matching it's speed
     private float distanceToClosestEnemy;               // Distance to the closest target
     private float targetUpdateTmr;                      // Timer for limiting how often units check for targets
-    private const float targetUpdateThreshold = 0.1f;   // Threshold
+    private const float targetUpdateThreshold = 0.05f;  // Threshold
 
     // Movement          
-    private float currentSpeed;                         // Normal movement speed of this unit
-    private float alteredSpeed;                         // When this unit is faster than an ally in front of this, use their speed
-    private bool isKnocked;                             // Stops moving while being knocked back
-    private float GetSpeed { get { return currentStats.maxSpeed; } }     // Return speed
-    public int Alliance { get; set; }                   // Alliance of this unit
-    public int Xindex { get; set; }                     // On which lane this unit is
-    public int Zindex { get; set; }                     // Each unit in lane gets a Zindex to identify it
+    [SerializeField] private float currentSpeed;            // Current speed of the unit
+    private float alteredSpeed;                             // When this unit is faster than an ally in front of this, use their speed
+    private bool isKnocked;                                 // Stops moving while being knocked back
+    private float GetSpeed { get { return currentSpeed; } } // Return speed
+    public int Alliance { get; set; }                       // Alliance of this unit
+    public int Xindex { get; set; }                         // On which lane this unit is
+    public int Zindex { get; set; }                         // Each unit in lane gets a Zindex to identify it
     public bool IsAlive
     {
         get { return currentStats.hp > 0; }
@@ -65,13 +65,6 @@ public class UnitController : MonoBehaviour
         manager = GameController.Instance;
         pooler = ObjectPooler.Instance;
         UnitName = currentStats.unitName;
-        currentStats.MaxHp = currentStats.hp;
-        currentSpeed = currentStats.maxSpeed;
-        // Stop moving at the beginning
-        SetMoving(false);
-        // Set attack index to random index or to a specific index
-        startingAttackIndex = selectedAttackIndex;
-        OnUnitSpawn();
         // Get the total weight of all of the movesets
         for (int i = 0; i < moveSet.Length; i++)
         {
@@ -79,14 +72,26 @@ public class UnitController : MonoBehaviour
             moveSet[i].minSelectWeightRange = totalAttackSelectWeight - moveSet[i].selectWeight;
             moveSet[i].maxSelectWeightRange = totalAttackSelectWeight;
         }
-
-        baseStats = currentStats;
     }
 
+    /// <summary>
+    /// After Upgrades have been applied, save some stats and variables
+    /// </summary>
     public void OnUnitSpawn()
     {
+        // Apply attack speed
         anim.SetFloat("attack_speed", currentStats.attack_speed);
+
+        // Set attack index to random index or to a specific index
+        startingAttackIndex = selectedAttackIndex;
         SetAttack();
+
+        // Save max hp
+        currentStats.MaxHp = currentStats.hp;
+        currentSpeed = currentStats.maxSpeed;
+
+        // Stop moving at the beginning
+        SetMoving(false);
     }
 
     private void FixedUpdate()
@@ -178,7 +183,7 @@ public class UnitController : MonoBehaviour
     {
         // Returns an array of units in front of this unit
         // This arrays length is maxtargets + 1 and the first value will be ally or null
-        targets = manager.CheckEnemy(transform.position,
+        targets = manager.CheckForTargets(transform.position,
             transform.position + transform.forward * currentStats.attack_range,
             transform.position + transform.forward * currentStats.stop_range,
             Alliance,
@@ -243,7 +248,7 @@ public class UnitController : MonoBehaviour
             distanceToClosestEnemy = currentStats.attack_range;
         }
 
-        // Stop movement if the current attack is set so
+        // Stop movement if the current attack stops movement
         if (!moveSet[selectedAttackIndex].stopMovement)
         {
             SetMoving(!foundStopRangeTarget);
@@ -424,7 +429,6 @@ public class UnitController : MonoBehaviour
         if (currentStats.hp <= 0)
         {
             anim.SetTrigger("die");
-            SetMoving(false);
             pooler.GetPooledObject("explosion", transform.position);
         }
     }
@@ -468,6 +472,7 @@ public class UnitController : MonoBehaviour
         anim.SetLayerWeight(1, 0f);
         alteredSpeed = 0;
         SetAttack();
+        SetMoving(false);
     }
 
     /// <summary>
@@ -479,24 +484,33 @@ public class UnitController : MonoBehaviour
         gameObject.SetActive(false);
     }
     #endregion
-    #region Upgrade
-
+    #region Upgrading
+    /// <summary>
+    /// Add multiple upgrades then apply them
+    /// </summary>
+    /// <param name="newUpgrades"></param>
     public void AddUpgrades(Upgrade[] newUpgrades)
     {
-        isAddingMultipleUpgrades = true;
+        if (newUpgrades.Length < 1)
+        {
+            return;
+        }
+
         foreach (Upgrade upgrade in newUpgrades)
         {
             AddUpgrade(upgrade);
         }
-        isAddingMultipleUpgrades = false;
         ApplyUpgrades();
     }
 
-    public void AddUpgrade(Upgrade newUpgrade)
+    /// <summary>
+    /// Add single upgrade and then apply it if not adding multiple upgrades
+    /// </summary>
+    /// <param name="newUpgrade"></param>
+    private void AddUpgrade(Upgrade newUpgrade)
     {
         if (!validUpgradeNames.Contains(newUpgrade.upgradeName))
         {
-            Debug.Log(UnitName + " does not have upgrade: " + newUpgrade.upgradeName);
             return; // Skip invalid upgrades
         }
 
@@ -508,23 +522,19 @@ public class UnitController : MonoBehaviour
         {
             appliedUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
         }
-
-        if (!isAddingMultipleUpgrades)
-        {
-            ApplyUpgrades();
-        }
     }
-
-    public void ApplyUpgrades()
+    /// <summary>
+    /// Apply upgrades to current stats
+    /// </summary>
+    private void ApplyUpgrades()
     {
-        currentStats = baseStats;
+        SaveOrLoadBaseStats();
         Dictionary<(string, string), float> statModifications = CalculateStatModifications();
 
         foreach (KeyValuePair<(string, string), float> statMod in statModifications)
         {
             switch (statMod.Key.Item1)
             {
-
                 case "damage":
                     if (statMod.Key.Item2.Equals("multi"))
                     {
@@ -573,22 +583,24 @@ public class UnitController : MonoBehaviour
 
     private Dictionary<(string, string), float> CalculateStatModifications()
     {
-        Dictionary<(string, string), float> statModifications = new();
+        statModifications.Clear();
         foreach (KeyValuePair<string, Upgrade> upgrade in appliedUpgrades)
         {
             foreach (KeyValuePair<(string, string), StatModification> statMod in upgrade.Value.statsAffectedDict)
             {
                 if (statModifications.TryGetValue(statMod.Key, out float amount))
                 {
-                    statModifications[statMod.Key] = amount + statMod.Value.amount;
+                    statModifications[statMod.Key] = amount + (statMod.Value.amount * upgrade.Value.upgradeLevel);
                 }
                 else
                 {
-                    statModifications.Add(statMod.Key, statMod.Value.amount);
+                    statModifications.Add(statMod.Key, statMod.Value.amount * upgrade.Value.upgradeLevel);
                 }
             }
         }
-        return statModifications;
+        // Return sorted dictionary in reverse order
+        // This makes multiplications before flat changes
+        return statModifications.OrderByDescending(kv => kv.Key.Item2).ToDictionary(kv => kv.Key, kv => kv.Value);
     }
 
 
@@ -597,8 +609,9 @@ public class UnitController : MonoBehaviour
         switch (type)
         {
             case "multi":
-                return value1 * value2;
-            case "add":
+                return value1 * (value2 + 1);
+
+            case "flat":
                 return value1 + value2;
             default:
                 Debug.Log(type + " was not found!");
@@ -606,10 +619,35 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// If base stats have not been assinged, save them
+    /// Otherwise load them
+    /// </summary>
+    private void SaveOrLoadBaseStats()
+    {
+        if (baseStats == null)
+        {
+            baseStats = currentStats;
+            baseStats.MaxHp = baseStats.hp;
+        }
+        else
+        {
+            currentStats = baseStats;
+        }
+    }
+
 
     public void ResetUpgrades()
     {
         appliedUpgrades.Clear();
+    }
+    #endregion
+
+    #region Other
+    public void ConvertUnit()
+    {
+        Alliance *= -1;
+        transform.Rotate(Vector3.up, 180f);
     }
     #endregion
 }

@@ -10,4 +10,5 @@ public abstract class PlayerDataTransferClass
     public Color highlightColor;
     public string[] units;
     public UpgradeTransfer[] upgrades;
+    public string[] ablilites;
 }

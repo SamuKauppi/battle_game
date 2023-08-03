@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -703,7 +703,7 @@ MonoBehaviour:
     obj: {fileID: 3862417277695984599, guid: b943b46f96592714f92a28feccc33c80, type: 3}
     amount: 30
     parent: {fileID: 629062758}
-  - ident: scythe
+  - ident: halberd
     obj: {fileID: 6524868391614631401, guid: 4d52a436acfc3f04fb9f020d87c705e7, type: 3}
     amount: 10
     parent: {fileID: 665503989}
@@ -727,7 +727,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2081715278}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.091182, y: -6.791137, z: -1.4586576}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

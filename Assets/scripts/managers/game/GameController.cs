@@ -1,13 +1,20 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// Controls the game
+/// Creates players, spawns units and checks unit targeting
 /// </summary>
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
+    // References
+    private ObjectPooler pooler;
+    private PersistentManager pManager;                     // Reference to a manager that transfers data between scenes
+    [SerializeField] private MaterialManager matManager;
 
     // Player prefabs
     [SerializeField] private HumanController humanPlayerPrefab;
@@ -16,11 +23,6 @@ public class GameController : MonoBehaviour
     // Player positons
     [SerializeField] private Transform playerParent;
     [SerializeField] private PlayerTransform[] playerTransforms;
-
-    // References
-    private ObjectPooler pooler;
-    private PersistentManager pManager;                     // Reference to a manager that transfers data between scenes
-    [SerializeField] private MaterialManager matManager;
 
     // Lane data
     [SerializeField] private Transform gameMapParent;
@@ -92,8 +94,12 @@ public class GameController : MonoBehaviour
             playerQualities = aiPlayer;
         }
 
+        Upgrade[] playerUpgrades = UpgradeManager.Instance.GetUpgrades(player.upgrades);
+        Ability[] playerAbilities = AbilityManager.Instance.GetAbilities(player.ablilites);
+
         playerQualities.SetPlayerProperties(player.Alliance, player.slotIndex, player.logoIndex, player.mainColor, player.detailColor,
-            player.highlightColor, player.units, matManager);
+            player.highlightColor, player.units, matManager, playerUpgrades, playerAbilities);
+
 
         if (playerQualities.Alliance > 0)
         {
@@ -152,7 +158,8 @@ public class GameController : MonoBehaviour
     /// <param name="rot"> Rotation of the unit </param>
     /// <param name="unitType"> Unit type </param>
     /// <param name="mat"> Material of the team </param>
-    public void SpawnUnit(int alliance, int xIndex, Vector3 pos, Quaternion rot, string unitType, Material mat)
+    public void SpawnUnit(int alliance, int xIndex, Vector3 pos, Quaternion rot, string unitType, 
+        Material mat, Upgrade[] upgrades, bool applyRandomUpgrade = false)
     {
         if (!pooler)
             pooler = ObjectPooler.Instance;
@@ -165,6 +172,16 @@ public class GameController : MonoBehaviour
         lanes[xIndex].indexCounter += 1;
         unit.Alliance = alliance;
         unit.IsAlive = true;
+        if (applyRandomUpgrade)
+        {
+            HashSet<Upgrade> upgradeSet = upgrades.ToHashSet();
+            upgradeSet.Add(pManager.availableUpgrades[Random.Range(0, upgrades.Length)]);
+            unit.AddUpgrades(upgradeSet.ToArray());
+        }
+        else
+        {
+            unit.AddUpgrades(upgrades);
+        }
         unit.OnUnitSpawn();
         lanes[xIndex].units.Add(unit);
     }
@@ -180,7 +197,7 @@ public class GameController : MonoBehaviour
     /// <param name="Zindex"> Index inside the lane (unique for unit in lane) </param>
     /// <param name="maxTargets"> How many targets can unit find (atleast one enemy and one ally) </param>
     /// <returns> Array of targets </returns>
-    public TargetInRange[] CheckEnemy(Vector3 thisPos, Vector3 attackRange, Vector3 stopRange, int alliance, int Xindex, int Zindex, int maxTargets)
+    public TargetInRange[] CheckForTargets(Vector3 thisPos, Vector3 attackRange, Vector3 stopRange, int alliance, int Xindex, int Zindex, int maxTargets)
     {
         // Create an array
         TargetInRange[] targets = new TargetInRange[maxTargets + 1];
@@ -196,7 +213,7 @@ public class GameController : MonoBehaviour
                 continue; // target is dead and will be removed
             }
 
-            if (Mathf.Abs(target.transform.position.z) > 12f)
+            if (Mathf.Abs(target.transform.position.z) > 13f)
             {
                 target.TakeDamage(1000000, "");
                 lanes[Xindex].units.RemoveAt(i);

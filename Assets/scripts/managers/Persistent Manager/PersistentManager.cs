@@ -11,7 +11,8 @@ public class PersistentManager : MonoBehaviour
 
     public SceneLoader loader;
     public UnitSpawn[] avaiableUnits;
-    public Upgrade[] availabeUpgrades;
+    public Upgrade[] availableUpgrades;
+    public Ability[] availableAbilities;
     private void Awake()
     {
         if (Instance == null)

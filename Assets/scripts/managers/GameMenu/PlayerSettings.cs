@@ -16,6 +16,8 @@ public class PlayerSettings : MonoBehaviour
     public TMP_Dropdown logo;
     public Image[] teamColors;
     public TMP_Dropdown[] units;
+    public UpgradeTransfer[] Upgrades { get; private set; }     // For storing Upgrades
+    public string[] Abilities { get; private set; }             // For stroing abilities
 
     // For loading player settings at Start
     private PersistentManager manager;
@@ -61,6 +63,9 @@ public class PlayerSettings : MonoBehaviour
         teamColors[0].color = new Color(playerData.mainColor.r, playerData.mainColor.g, playerData.mainColor.b, 1f);
         teamColors[1].color = new Color(playerData.detailColor.r, playerData.detailColor.g, playerData.detailColor.b, 1f);
         teamColors[2].color = new Color(playerData.highlightColor.r, playerData.highlightColor.g, playerData.highlightColor.b, 1f);
+
+        Upgrades = playerData.upgrades;
+        Abilities = playerData.ablilites;
 
         unitAdder.AddUnits(playerData.units);
     }

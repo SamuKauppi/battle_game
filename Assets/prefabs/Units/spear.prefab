@@ -275,7 +275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: validUpgradeNames.Array.size
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].maxRange
@@ -303,23 +303,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: validUpgradeNames.Array.data[0]
-      value: reach
+      value: shield
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: validUpgradeNames.Array.data[1]
-      value: staff
+      value: reach
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: validUpgradeNames.Array.data[2]
-      value: damage
+      value: staff
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: validUpgradeNames.Array.data[3]
-      value: durability
+      value: damage
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: validUpgradeNames.Array.data[4]
-      value: swift
+      value: durability
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: validUpgradeNames.Array.data[5]
+      value: speed
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: validUpgradeNames.Array.data[6]
+      value: health
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: validUpgradeNames.Array.data[7]
+      value: attack speed
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].attackType

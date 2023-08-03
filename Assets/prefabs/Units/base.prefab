@@ -61,7 +61,8 @@ MonoBehaviour:
     thrustArmor: 10
     bluntArmor: 10
     specialArmor: 10
-  validUpgradeNames: []
+  validUpgradeNames:
+  - health
   selectedAttackIndex: 0
   randomIndexAtStart: 0
   moveSet:
@@ -115,8 +116,8 @@ MonoBehaviour:
     maxRange: 1
     minRange: 0
     stopMovement: 0
-  shouldAttack: 0
   targets: []
+  currentSpeed: 0
 --- !u!1001 &6263984148705341736
 PrefabInstance:
   m_ObjectHideFlags: 0
