@@ -113,8 +113,8 @@ public class StartGame : MonoBehaviour
                     detailColor = player.teamColors[1].color,
                     highlightColor = player.teamColors[2].color,
                     units = units.ToArray(),
-                    upgrades = player.Upgrades,
-                    ablilites = player.Abilities
+                    upgrades = player.Upgrades.ToArray(),
+                    ablilites = player.Abilities.ToArray(),
                 };
                 gameData.humanPlayers.Add((HumanPlayerTransfer)playerData);
             }
@@ -140,8 +140,8 @@ public class StartGame : MonoBehaviour
                     detailColor = player.teamColors[1].color,
                     highlightColor = player.teamColors[2].color,
                     units = units.ToArray(),
-                    upgrades = player.Upgrades,
-                    ablilites = player.Abilities,
+                    upgrades = player.Upgrades.ToArray(),
+                    ablilites = player.Abilities.ToArray(),
                     aiPlayerCombos = combos
                 };
 

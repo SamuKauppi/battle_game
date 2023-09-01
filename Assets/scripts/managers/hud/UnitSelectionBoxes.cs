@@ -11,4 +11,5 @@ public class UnitSelectionBoxes
     public Image selector;
     public Image logo;
     public Slider[] abilitySliders;
+    public Image[] abilityImages;
 }

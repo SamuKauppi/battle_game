@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -33,17 +34,16 @@ public class AiController : PlayerController
     public StringArray[] UnitData { get; set; }         // Data about which unit counters which (copied from GameManager)
     private string closestUnit;                         // Closest unit's name (used to find a counter for it)
 
-    // Other variables
-    private bool firstPos = true;                       // To find a new lane at start
+    // Ability related
+    private bool unitWasSpawned;
 
+    public override void OnStart()
+    {
+        FindNewPosition();
+    }
 
     private void Update()
     {
-        if (firstPos)
-        {
-            FindNewPosition();
-            firstPos = false;
-        }
 
         if (selectedPos < desiredLaneIndex)
         {
@@ -75,11 +75,13 @@ public class AiController : PlayerController
         CheckUnitInput();
         CheckSpawn();
         CheckAbilities();
+        AiActivateAbility();
     }
 
     public override void OnUnitSpawn()
     {
         FindNewPosition();
+        unitWasSpawned = true;
     }
     private void FindNewPosition()
     {
@@ -215,4 +217,57 @@ public class AiController : PlayerController
         return nextUnit;
     }
 
+    private void AiActivateAbility()
+    {
+        for (int i = 0; i < Abilities.Length; i++)
+        {
+            Ability ability = Abilities[i];
+
+            if (!ability.IsTheAbilityReady())
+            {
+                continue;
+            }
+            
+            switch (ability.abilityTag)
+            {
+                case "double":
+                    if (AnUnitWasJustSpawned())
+                    {
+                        // Activate the "double" ability
+                        ActivateAbility(i);
+                    }
+                    break;
+
+                case "convert":
+                    if (ThereIsAnEnemyUnitInSelectedLane())
+                    {
+                        // Activate the "convert" ability
+                        ActivateAbility(i);
+                    }
+                    break;
+
+                case "column":
+                case "production":
+                    // Activate the "column" and "production" abilities since they don't require additional conditions
+                    ActivateAbility(i);
+                    break;
+
+                // Add more cases for other abilities as needed
+
+                default:
+                    break;
+            }
+        }
+        unitWasSpawned = false;
+    }
+
+    private bool AnUnitWasJustSpawned()
+    {
+        return unitWasSpawned;
+    }
+
+    private bool ThereIsAnEnemyUnitInSelectedLane()
+    {
+        return lanes[desiredLaneIndex].units.Any(unit => unit.Alliance != Alliance);
+    }
 }

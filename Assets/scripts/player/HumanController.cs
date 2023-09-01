@@ -4,13 +4,82 @@ using UnityEngine;
 
 public class HumanController : PlayerController
 {
+    public override void OnStart()
+    {
+        if (PlayerIndex % 2 == 0)
+        {
+            playerType = PlayerType.p1;
+        }
+        else
+        {
+            playerType = PlayerType.p2;
+        }
+    }
+    public enum PlayerType
+    {
+        p1,
+        p2,
+        main
+    }
+
+    public PlayerType playerType;
+
     private void Update()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (playerType == PlayerType.p1)
+        {
+            HandleP1Input();
+        }
+        else if (playerType == PlayerType.p2)
+        {
+            HandleP2Input();
+        }
+        else if (playerType == PlayerType.main)
+        {
+            HandleMainInput();
+        }
+
+        CheckPosInput();
+        CheckUnitInput();
+        CheckSpawn();
+        CheckAbilities();
+    }
+
+    private void HandleP1Input()
+    {
+        HandlePositionInput(KeyCode.W, KeyCode.S);
+        HandleUnitInput(KeyCode.A, KeyCode.D);
+        CheckAbilityInput(KeyCode.Alpha1, 0);
+        CheckAbilityInput(KeyCode.Alpha2, 1);
+        CheckAbilityInput(KeyCode.Alpha3, 2);
+        CheckAbilityInput(KeyCode.Alpha4, 3);
+        CheckAbilityInput(KeyCode.Alpha5, 4);
+    }
+
+    private void HandleP2Input()
+    {
+        HandlePositionInput(KeyCode.UpArrow, KeyCode.DownArrow);
+        HandleUnitInput(KeyCode.LeftArrow, KeyCode.RightArrow);
+        CheckAbilityInput(KeyCode.Keypad1, 0);
+        CheckAbilityInput(KeyCode.Keypad2, 1);
+        CheckAbilityInput(KeyCode.Keypad3, 2);
+        CheckAbilityInput(KeyCode.Keypad4, 3);
+        CheckAbilityInput(KeyCode.Keypad5, 4);
+    }
+
+    private void HandleMainInput()
+    {
+        HandleP1Input();
+        HandleP2Input();
+    }
+
+    private void HandlePositionInput(KeyCode positiveKey, KeyCode negativeKey)
+    {
+        if (Input.GetKey(positiveKey))
         {
             PosInput = -1;
         }
-        else if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(negativeKey))
         {
             PosInput = 1;
         }
@@ -18,40 +87,24 @@ public class HumanController : PlayerController
         {
             PosInput = 0;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+    private void HandleUnitInput(KeyCode leftKey, KeyCode rightKey)
+    {
+        if (Input.GetKeyDown(leftKey))
         {
             UnitInput = -1;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(rightKey))
         {
             UnitInput = 1;
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+    }
+    private void CheckAbilityInput(KeyCode key, int abilityIndex)
+    {
+        if (Input.GetKeyDown(key))
         {
-            ActivateAbility(0);
+            ActivateAbility(abilityIndex);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ActivateAbility(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            ActivateAbility(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            ActivateAbility(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            ActivateAbility(4);
-        }
-
-        CheckPosInput();
-        CheckUnitInput();
-        CheckSpawn();
-        CheckAbilities();
     }
 }

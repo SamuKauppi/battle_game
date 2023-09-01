@@ -67,8 +67,6 @@ public class SpawnHudController : MonoBehaviour
         return unitsToSpawn.ToArray();
     }
 
-
-
     public Ability[] SetAbilitySliders(int playerIndex, Ability[] abilities)
     {
         // Check if the playerIndex is within bounds
@@ -79,6 +77,7 @@ public class SpawnHudController : MonoBehaviour
 
         // Get the ability sliders for the specified player
         Slider[] abilitySliders = selectionBoxes[playerIndex].abilitySliders;
+        Image[] abilityImages = selectionBoxes[playerIndex].abilityImages;
 
         // Ensure that abilities and abilitySliders have the same length
         int length = Mathf.Min(abilities.Length, abilitySliders.Length);
@@ -88,20 +87,20 @@ public class SpawnHudController : MonoBehaviour
         {
             abilitySliders[i].maxValue = abilities[i].cooldown;
             abilitySliders[i].gameObject.SetActive(true);
+            abilityImages[i].sprite = abilities[i].abilityLogo;
             abilities[i].AbilitySlider = abilitySliders[i];
         }
 
         return abilities;
     }
 
+    public void SetPlayerLogo(int playerIndex, int logoIndex)
+    {
+        selectionBoxes[playerIndex].logo.sprite = LogoSprites[logoIndex];
+    }
 
     public void MoveSelector(int playerIndex, RectTransform pos)
     {
         selectionBoxes[playerIndex].selector.rectTransform.position = pos.position;
-    }
-
-    public void SetPlayerLogo(int playerIndex, int logoIndex)
-    {
-        selectionBoxes[playerIndex].logo.sprite = LogoSprites[logoIndex];
     }
 }

@@ -20,13 +20,13 @@ public class AbilityManager : MonoBehaviour
         List<Ability> abilityList = new();
         _ = abilityNames.ToHashSet();
 
-        abilities ??= GetAbilities();
+        abilities ??= GetAbilities();   // This was to fix a wierd bug where this object somehow "forgets" abilities
 
         foreach (Ability ability in abilities)
         {
-            if (abilityNames.Contains(ability.ablityTag))
+            if (abilityNames.Contains(ability.abilityTag))
             {
-                abilityList.Add(ability);
+                abilityList.Add(new Ability(ability));
             }
         }
         return abilityList.ToArray();

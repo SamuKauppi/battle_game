@@ -22,7 +22,7 @@ public class UpgradeManager : MonoBehaviour
 
         foreach (UpgradeTransfer transferInfo in transferInfos)
         {
-            Upgrade upgrade = FindMatchingUpgrade(transferInfo.upgradeName);
+            Upgrade upgrade = FindMatchingUpgrade(transferInfo.upgradeTag);
             if (upgrade != null)
             {
                 upgrade.upgradeLevel = transferInfo.upgradeLevel;
@@ -37,9 +37,9 @@ public class UpgradeManager : MonoBehaviour
     {
         foreach (Upgrade upgrade in manager.availableUpgrades)
         {
-            if (upgrade.upgradeName.Equals(upgradeName))
+            if (upgrade.upgradeTag.Equals(upgradeName))
             {
-                return upgrade;
+                return new Upgrade(upgrade);
             }
         }
         return null;

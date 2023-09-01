@@ -719,6 +719,10 @@ MonoBehaviour:
     obj: {fileID: 3907140276813843302, guid: c7cb62e4ed12bf643b03ca017738b594, type: 3}
     amount: 50
     parent: {fileID: 1704846967}
+  - ident: electric
+    obj: {fileID: 1471808439026689548, guid: a481e6587c53e73409e6b20438e5e41c, type: 3}
+    amount: 50
+    parent: {fileID: 1704846967}
 --- !u!4 &2081715280
 Transform:
   m_ObjectHideFlags: 0

@@ -4655,7 +4655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12661,6 +12661,13 @@ MonoBehaviour:
     - {fileID: 871128271}
     - {fileID: 1894085746}
     - {fileID: 337542238}
+    abilityImages:
+    - {fileID: 1436922469}
+    - {fileID: 1467627271}
+    - {fileID: 1398431045}
+    - {fileID: 1115871123}
+    - {fileID: 636712029}
+    - {fileID: 1197624771}
   - parentObject: {fileID: 4793338566784659640}
     slidersObjs:
     - {fileID: 1031998688328388481}
@@ -12689,6 +12696,13 @@ MonoBehaviour:
     - {fileID: 52613117}
     - {fileID: 41168169}
     - {fileID: 781435326}
+    abilityImages:
+    - {fileID: 136482333}
+    - {fileID: 742507605}
+    - {fileID: 93767492}
+    - {fileID: 1478130617}
+    - {fileID: 21586941}
+    - {fileID: 1131435401}
   - parentObject: {fileID: 4493017873372159817}
     slidersObjs:
     - {fileID: 4120153874572594387}
@@ -12717,6 +12731,13 @@ MonoBehaviour:
     - {fileID: 2895721964215853504}
     - {fileID: 8241183930046283892}
     - {fileID: 4703542241289831023}
+    abilityImages:
+    - {fileID: 1236206703118786542}
+    - {fileID: 6612555606628715960}
+    - {fileID: 4437501508944904704}
+    - {fileID: 2411699656443734786}
+    - {fileID: 211831070428544047}
+    - {fileID: 7082798803817360046}
   - parentObject: {fileID: 6229422151060792686}
     slidersObjs:
     - {fileID: 7290858023373153701}
@@ -12745,6 +12766,13 @@ MonoBehaviour:
     - {fileID: 161352411349737798}
     - {fileID: 9157803994864520257}
     - {fileID: 8408305016249545600}
+    abilityImages:
+    - {fileID: 2778335885236507562}
+    - {fileID: 5693344518784138952}
+    - {fileID: 1662570800586688572}
+    - {fileID: 136773845926065522}
+    - {fileID: 3793694889097007776}
+    - {fileID: 511361612805097012}
   LogoSprites:
   - {fileID: 21300000, guid: 36f4adc8e21a0d0448e8c2585b593f61, type: 3}
   - {fileID: 21300000, guid: 57cf0adaa3127db40bcbe6bc8b1914f0, type: 3}

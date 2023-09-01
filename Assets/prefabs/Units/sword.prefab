@@ -28,6 +28,10 @@ PrefabInstance:
       value: sword
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: deathPos
+      value: 
+      objectReference: {fileID: 7519292045009703800}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: unitName
       value: sword
       objectReference: {fileID: 0}
@@ -72,8 +76,12 @@ PrefabInstance:
       value: sword
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: currentStats.bluntArmor
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.slashArmor
-      value: 42
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.stop_range
@@ -81,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.thrustArmor
-      value: 60
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.attack_range
@@ -89,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.specialArmor
-      value: 30
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].damage
@@ -267,6 +275,11 @@ Transform:
 --- !u!4 &3679808386987408640 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317744364535458403, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 647106181578856291}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7519292045009703800 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6963444506210255899, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_PrefabInstance: {fileID: 647106181578856291}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2303841577065648825

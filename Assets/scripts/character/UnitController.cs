@@ -50,6 +50,10 @@ public class UnitController : MonoBehaviour
     private float alteredSpeed;                             // When this unit is faster than an ally in front of this, use their speed
     private bool isKnocked;                                 // Stops moving while being knocked back
     private float GetSpeed { get { return currentSpeed; } } // Return speed
+
+    // Other
+    private int deathIndex;                                 // Changes death animation based how much damage unit takes
+    [SerializeField] private Transform deathPos;            // Transform of chect bone. Used to spawn explosion to correct pos
     public int Alliance { get; set; }                       // Alliance of this unit
     public int Xindex { get; set; }                         // On which lane this unit is
     public int Zindex { get; set; }                         // Each unit in lane gets a Zindex to identify it
@@ -58,6 +62,8 @@ public class UnitController : MonoBehaviour
         get { return currentStats.hp > 0; }
         set { if (currentStats.MaxHp > 0) currentStats.hp = currentStats.MaxHp; }
     }  // Is this unit alive or set it alive
+
+
 
     #region Start/Update
     private void Start()
@@ -402,7 +408,7 @@ public class UnitController : MonoBehaviour
             return;
 
         // Define the armor type based on the damage type
-        float armorType = damageType switch
+        float armorValue = damageType switch
         {
             "thurst" => currentStats.thrustArmor,
             "blunt" => currentStats.bluntArmor,
@@ -410,14 +416,11 @@ public class UnitController : MonoBehaviour
             _ => currentStats.slashArmor,
         };
 
-        // Calculate the total armor value with multipliers and flat armor
-        float totalArmor = armorType;
-
         // Get the multiplier for this attack type
-        float resistanceMultiplier = GetDamageModifier(totalArmor);
+        float resistanceMultiplier = GetDamageModifier(armorValue);
 
         // Calculate damage and take damage
-        float damage = amount * Random.Range(0.95f, 1.06f) * resistanceMultiplier;
+        float damage = amount * resistanceMultiplier * Random.Range(0.95f, 1.05f);
         currentStats.hp -= damage;
 
         pooler.GetPooledObject("sparks", transform.position);
@@ -428,8 +431,18 @@ public class UnitController : MonoBehaviour
         // Is this units hp falls below 0, it dies
         if (currentStats.hp <= 0)
         {
+            float hp = currentStats.hp;
+            float hpThreshold = currentStats.MaxHp * -0.2f;
+            if (hp > hpThreshold)
+                deathIndex = 0;
+            else if (hp < hpThreshold && hp > hpThreshold * 2)
+                deathIndex = 1;
+            else
+                deathIndex = 2;
+
+            anim.SetLayerWeight(1, 0f);
+            anim.SetFloat("deathIndex", deathIndex);
             anim.SetTrigger("die");
-            pooler.GetPooledObject("explosion", transform.position);
         }
     }
     /// <summary>
@@ -467,9 +480,9 @@ public class UnitController : MonoBehaviour
     /// </summary>
     public void OnDeath()
     {
+        SpawnElectricity();
         Xindex = -1;
         Zindex = -1;
-        anim.SetLayerWeight(1, 0f);
         alteredSpeed = 0;
         SetAttack();
         SetMoving(false);
@@ -509,18 +522,18 @@ public class UnitController : MonoBehaviour
     /// <param name="newUpgrade"></param>
     private void AddUpgrade(Upgrade newUpgrade)
     {
-        if (!validUpgradeNames.Contains(newUpgrade.upgradeName))
+        if (!validUpgradeNames.Contains(newUpgrade.upgradeTag))
         {
             return; // Skip invalid upgrades
         }
 
-        if (appliedUpgrades.ContainsKey(newUpgrade.upgradeName))
+        if (appliedUpgrades.ContainsKey(newUpgrade.upgradeTag))
         {
-            appliedUpgrades[newUpgrade.upgradeName] = newUpgrade; // Overwrite the existing upgrade
+            appliedUpgrades[newUpgrade.upgradeTag] = newUpgrade; // Overwrite the existing upgrade
         }
         else
         {
-            appliedUpgrades.Add(newUpgrade.upgradeName, newUpgrade); // Add the new upgrade
+            appliedUpgrades.Add(newUpgrade.upgradeTag, newUpgrade); // Add the new upgrade
         }
     }
     /// <summary>
@@ -642,12 +655,27 @@ public class UnitController : MonoBehaviour
         appliedUpgrades.Clear();
     }
     #endregion
-
     #region Other
     public void ConvertUnit()
     {
         Alliance *= -1;
         transform.Rotate(Vector3.up, 180f);
+    }
+
+    /// <summary>
+    /// Spawn explosion. Called from animation
+    /// </summary>
+    public void SpawnExplosion()
+    {
+        if (deathPos == null)
+            deathPos = transform;
+
+        pooler.GetPooledObject("explosion", deathPos.position);
+    }
+
+    private void SpawnElectricity()
+    {
+        pooler.GetPooledObject("electric", transform.position);
     }
     #endregion
 }

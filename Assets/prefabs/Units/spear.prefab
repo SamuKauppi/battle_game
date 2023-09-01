@@ -178,6 +178,10 @@ PrefabInstance:
       value: spear
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: deathPos
+      value: 
+      objectReference: {fileID: 2115469667719042227}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: unitName
       value: spear
       objectReference: {fileID: 0}
@@ -239,11 +243,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.bluntArmor
-      value: 60
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.slashArmor
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.stop_range
@@ -251,7 +255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.thrustArmor
-      value: 20
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.attack_range
@@ -259,7 +263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.specialArmor
-      value: 60
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].damage
@@ -425,6 +429,11 @@ PrefabInstance:
     - {fileID: 4986132798509453198, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
     - {fileID: 497483776350123267, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+--- !u!4 &2115469667719042227 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6963444506210255899, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 9077206904648700072}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5049381847966661323 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317744364535458403, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}

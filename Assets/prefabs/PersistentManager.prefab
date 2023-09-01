@@ -88,7 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6559595d734355e4ca162f2da470cfa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilities: []
 --- !u!1 &8362839826387592397
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,14 +190,18 @@ MonoBehaviour:
       detailColor: {r: 1, g: 0, b: 0, a: 0}
       highlightColor: {r: 0.2967633, g: 1, b: 0, a: 0}
       units:
-      - sword
-      - spear
-      - axe
-      - mace
-      - scout
       - gun
       - halberd
-      upgrades: []
+      - mace
+      - scout
+      - spear
+      - sword
+      - axe
+      upgrades:
+      - upgradeTag: swift
+        upgradeLevel: 2
+      - upgradeTag: damage
+        upgradeLevel: 2
       ablilites:
       - double
       - convert
@@ -213,15 +216,22 @@ MonoBehaviour:
       detailColor: {r: 0.57500184, g: 1, b: 0, a: 0}
       highlightColor: {r: 1, g: 0, b: 0, a: 0}
       units:
-      - sword
-      - spear
-      - axe
-      - mace
-      - scout
       - gun
       - halberd
-      upgrades: []
-      ablilites: []
+      - mace
+      - scout
+      - spear
+      - sword
+      - axe
+      upgrades:
+      - upgradeTag: heavy
+        upgradeLevel: 2
+      - upgradeTag: dual
+        upgradeLevel: 2
+      ablilites:
+      - 
+      - 
+      - 
       aiPlayerCombos: []
       emerencyDist: 4.5
     map: {fileID: 0}
@@ -247,27 +257,27 @@ MonoBehaviour:
     - mace
   - array:
     - mace
-    - spear
     - gun
-    - axe
     - mace
-    - halberd
     - sword
+    - halberd
+    - spear
+    - axe
     - scout
   - array:
     - halberd
-    - halberd
-    - spear
-    - sword
-    - gun
     - mace
-    - scout
+    - gun
+    - halberd
+    - sword
+    - spear
     - axe
+    - scout
   - array:
     - scout
     - mace
-    - sword
     - halberd
+    - sword
     - axe
     - scout
     - spear
@@ -276,20 +286,20 @@ MonoBehaviour:
     - gun
     - scout
     - axe
-    - spear
     - sword
+    - spear
     - mace
     - halberd
     - gun
   - array:
     - axe
     - mace
-    - gun
-    - scout
-    - spear
-    - axe
     - halberd
+    - spear
     - sword
+    - gun
+    - axe
+    - scout
   loader: {fileID: 8362839826387592399}
   avaiableUnits:
   - unitName: sword
@@ -342,7 +352,8 @@ MonoBehaviour:
     pickSlider: {fileID: 0}
     rectPosition: {fileID: 0}
   availableUpgrades:
-  - upgradeName: shield
+  - upgradeTag: shield
+    upgradeName: Shield
     statsAffected:
     - statAffected: armor
       modificationType: flat
@@ -351,7 +362,8 @@ MonoBehaviour:
       modificationType: flat
       amount: 10
     upgradeLevel: 1
-  - upgradeName: swift
+  - upgradeTag: swift
+    upgradeName: Swift
     statsAffected:
     - statAffected: delay
       modificationType: flat
@@ -363,7 +375,8 @@ MonoBehaviour:
       modificationType: multi
       amount: 0.05
     upgradeLevel: 1
-  - upgradeName: dual
+  - upgradeTag: dual
+    upgradeName: Dual
     statsAffected:
     - statAffected: damage
       modificationType: flat
@@ -375,7 +388,8 @@ MonoBehaviour:
       modificationType: flat
       amount: 5
     upgradeLevel: 1
-  - upgradeName: heavy
+  - upgradeTag: heavy
+    upgradeName: Heavy
     statsAffected:
     - statAffected: armor
       modificationType: flat
@@ -384,7 +398,8 @@ MonoBehaviour:
       modificationType: flat
       amount: 10
     upgradeLevel: 1
-  - upgradeName: sharp
+  - upgradeTag: sharp
+    upgradeName: Sharp
     statsAffected:
     - statAffected: damage
       modificationType: flat
@@ -393,7 +408,8 @@ MonoBehaviour:
       modificationType: multi
       amount: 0.1
     upgradeLevel: 1
-  - upgradeName: reach
+  - upgradeTag: reach
+    upgradeName: Reach
     statsAffected:
     - statAffected: range
       modificationType: multi
@@ -402,16 +418,18 @@ MonoBehaviour:
       modificationType: flat
       amount: 10
     upgradeLevel: 1
-  - upgradeName: staff
+  - upgradeTag: staff
+    upgradeName: Staff
     statsAffected:
     - statAffected: armor
       modificationType: flat
       amount: 10
     - statAffected: damage
-      modificationType: multi
+      modificationType: flat
       amount: 10
     upgradeLevel: 1
-  - upgradeName: damage
+  - upgradeTag: damage
+    upgradeName: Damage
     statsAffected:
     - statAffected: damage
       modificationType: flat
@@ -420,7 +438,8 @@ MonoBehaviour:
       modificationType: multi
       amount: 0.01
     upgradeLevel: 1
-  - upgradeName: health
+  - upgradeTag: health
+    upgradeName: Health
     statsAffected:
     - statAffected: hp
       modificationType: flat
@@ -429,7 +448,8 @@ MonoBehaviour:
       modificationType: multi
       amount: 0.01
     upgradeLevel: 1
-  - upgradeName: durability
+  - upgradeTag: durability
+    upgradeName: Durability
     statsAffected:
     - statAffected: armor
       modificationType: flat
@@ -438,46 +458,48 @@ MonoBehaviour:
       modificationType: multi
       amount: 0.01
     upgradeLevel: 1
-  - upgradeName: speed
+  - upgradeTag: speed
+    upgradeName: Speed
     statsAffected:
     - statAffected: speed
       modificationType: multi
       amount: 0.02
     upgradeLevel: 1
-  - upgradeName: attack speed
+  - upgradeTag: attack speed
+    upgradeName: Atack Speed
     statsAffected:
     - statAffected: as
       modificationType: multi
       amount: 0.02
     upgradeLevel: 1
   availableAbilities:
-  - ablityTag: double
+  - abilityTag: double
     abilityName: Double Summon
     abilityDescription: Spawn another unit instantly
     cooldown: 10
     duration: 0
-    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
-  - ablityTag: convert
+    abilityLogo: {fileID: 21300000, guid: 609a8b75d47e38b449af983a92f9c3c7, type: 3}
+  - abilityTag: convert
     abilityName: Convert
     abilityDescription: Convert closest enemy unit from a row to your side
     cooldown: 20
     duration: 0
-    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
-  - ablityTag: column
+    abilityLogo: {fileID: 21300000, guid: 7ace39753e08ba4469697dad5ac0c5a2, type: 3}
+  - abilityTag: column
     abilityName: Column Formation
     abilityDescription: Your next unit will spawn in every lane
     cooldown: 30
     duration: 0
-    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
-  - ablityTag: production
+    abilityLogo: {fileID: 21300000, guid: 02c5a2927f31039409d192474befb7ca, type: 3}
+  - abilityTag: production
     abilityName: Faster Production
     abilityDescription: Faster unit production for 10 seconds
     cooldown: 30
     duration: 10
-    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
-  - ablityTag: upgrade
+    abilityLogo: {fileID: 21300000, guid: d57fe4c78543b394d92cd0d79165d77a, type: 3}
+  - abilityTag: upgrade
     abilityName: Random Upgrade
     abilityDescription: Give random upgrades to units when they spawn
     cooldown: 0
     duration: 0
-    abilityLogo: {fileID: 21300000, guid: 8a63433aec8ade94a9aac1658ef6f73b, type: 3}
+    abilityLogo: {fileID: 21300000, guid: 234ed813a6b3ee94e92d73666fd5629b, type: 3}

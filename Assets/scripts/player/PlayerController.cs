@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Controls the player. Abstract class for both AI and human
@@ -29,10 +30,10 @@ public abstract class PlayerController : MonoBehaviour
     // Player qualities (inherited)
     private Material roboMaterial;
     private Upgrade[] Upgrades { get; set; }
-    private Ability[] Abilities { get; set; }
+    public Ability[] Abilities { get; set; }
     private string[] UnitNames { get; set; }    // Units player has access to
     public int Alliance { get; set; }           // Alliance tells units who to attack
-    private int PlayerIndex { get; set; }       // Player indentifier (needs to be unique for the scene)
+    public int PlayerIndex { get; set; }        // Player indentifier (needs to be unique for the scene)
     private int LogoIndex { get; set; }         // Logo index 
     private Color BaseColor { get; set; }       // Base color of the team
     private Color DetailColor { get; set; }     // Detail color of the team
@@ -56,8 +57,8 @@ public abstract class PlayerController : MonoBehaviour
         MatManager = matManager;
         Upgrades = upgrades;
         Abilities = abilities;
-        Debug.Log("spawn");
     }
+
 
     private void Start()
     {
@@ -68,18 +69,24 @@ public abstract class PlayerController : MonoBehaviour
         spawnManager.SetPlayerLogo(PlayerIndex, LogoIndex);
         units = spawnManager.GetUnitSlots(UnitNames, PlayerIndex);
         Abilities = spawnManager.SetAbilitySliders(PlayerIndex, Abilities);
-
         PosInput = 0;
         lanesLength = gameManager.GetLaneData().Length - 1;
 
         for (int i = 0; i < Abilities.Length; i++)
         {
-            if (Abilities[i].ablityTag.Equals("upgrade"))
+            if (Abilities[i].abilityTag.Equals("upgrade"))
             {
                 RandomUpgrades = true;
                 break;
             }
         }
+
+        OnStart();
+    }
+
+    public virtual void OnStart()
+    {
+
     }
 
     /// <summary>
@@ -145,7 +152,7 @@ public abstract class PlayerController : MonoBehaviour
     {
         if (spawnTimer > units[selectedUnit].spawnTime)
         {
-            gameManager.SpawnUnit(Alliance, selectedPos, selector.position, transform.rotation, 
+            gameManager.SpawnUnit(Alliance, selectedPos, selector.position, transform.rotation,
                 units[selectedUnit].unitName, roboMaterial, Upgrades, RandomUpgrades);
             spawnTimer = 0f;
             OnUnitSpawn();
@@ -156,9 +163,9 @@ public abstract class PlayerController : MonoBehaviour
             spawnTimer += Time.deltaTime;
         }
 
-        for (int i = 0; i < units.Length; i++)
+        foreach (UnitSpawn unit in units)
         {
-            units[i].pickSlider.value = spawnTimer;
+            unit.pickSlider.value = unit.spawnTime - spawnTimer;
         }
     }
 
@@ -167,7 +174,8 @@ public abstract class PlayerController : MonoBehaviour
         foreach (Ability ability in Abilities)
         {
             ability.CooldownTimer += Time.deltaTime;
-            ability.AbilitySlider.value = ability.CooldownTimer;
+            ability.AbilitySlider.SetValueWithoutNotify(ability.cooldown - ability.CooldownTimer);
+
         }
     }
 
@@ -190,15 +198,14 @@ public abstract class PlayerController : MonoBehaviour
                 return;
             }
 
-            if (!ability.ablityTag.Equals(Abilities[abilityIndex].ablityTag) || !ability.IsTheAbilityReady())
+            if (!ability.abilityTag.Equals(Abilities[abilityIndex].abilityTag) || !ability.IsTheAbilityReady())
             {
                 continue;
             }
-
             Debug.Log("Activate ability = " + Abilities[abilityIndex].abilityName);
             ability.CooldownTimer = 0f;
 
-            switch (ability.ablityTag)
+            switch (ability.abilityTag)
             {
                 case "double":
                     spawnTimer += 10000;
@@ -227,11 +234,8 @@ public abstract class PlayerController : MonoBehaviour
                 case "production":
                     StartCoroutine(FasterProduction(ability.duration));
                     return;
-                case "upgrade":
-                    RandomUpgrades = true;
-                    return;
                 default:
-                    Debug.Log(ability.ablityTag + " does not exist");
+                    Debug.Log(ability.abilityTag + " does not exist or is not active");
                     return;
             }
         }
@@ -245,8 +249,8 @@ public abstract class PlayerController : MonoBehaviour
     }
 
     private IEnumerator ColumnSpawn()
-    { 
-        while(spawnTimer < units[selectedUnit].spawnTime)
+    {
+        while (spawnTimer < units[selectedUnit].spawnTime)
         {
             yield return null;
         }

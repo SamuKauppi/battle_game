@@ -11,11 +11,10 @@ public class AnimEvents : MonoBehaviour
     {
         controller.Attack();
     }
-
-    //public void StartAttack()
-    //{
-    //    controller.OnAttackStart();
-    //}
+    public void Explode()
+    {
+        controller.SpawnExplosion();
+    }
     public void EndAttack()
     {
         controller.OnAttackEnd();

@@ -101,6 +101,10 @@ PrefabInstance:
       value: scout
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: deathPos
+      value: 
+      objectReference: {fileID: 276737782372784284}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: unitName
       value: scout
       objectReference: {fileID: 0}
@@ -153,8 +157,20 @@ PrefabInstance:
       value: scout
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: currentStats.bluntArmor
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: currentStats.slashArmor
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.stop_range
       value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+      propertyPath: currentStats.thrustArmor
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.attack_range
@@ -166,7 +182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: currentStats.specialArmor
-      value: 50
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6263984149018320722, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
       propertyPath: moveSet.Array.data[0].damage
@@ -300,6 +316,11 @@ PrefabInstance:
     - {fileID: 7920593496683651855, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
     - {fileID: 4986132798509453198, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+--- !u!4 &276737782372784284 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6963444506210255899, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
+  m_PrefabInstance: {fileID: 7166410535104978055}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6385965690542110436 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4317744364535458403, guid: a3d7aac6389d0ef409170eac5188104a, type: 3}
