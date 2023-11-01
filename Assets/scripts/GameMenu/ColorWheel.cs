@@ -7,11 +7,11 @@ using UnityEngine.UI;
 public class ColorWheel : MonoBehaviour
 {
     [SerializeField] private Image colorImage;          // Gradient image that user uses to pick color
-    [SerializeField] private Image previewImage;         // The selected color is set on
-    private Image targetImage;
+    [SerializeField] private Image previewImage;        // The selected color is set on
     [SerializeField] private Image colorPickSprite;     // Small circle that user uses to pick color
     [SerializeField] private Slider hueSlider;
 
+    private Image targetImage;
     private Color newColor;
     private float hue = 0;
     private float saturation = 0;

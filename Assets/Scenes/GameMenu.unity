@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4932,10 +4932,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1057192560}
     m_Modifications:
-    - target: {fileID: 3167005094141343939, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: bae98e565df27b84296a751d4f7032a1, type: 3}
     - target: {fileID: 3167005094201446298, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5024,37 +5020,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: ColorPicker
       objectReference: {fileID: 0}
-    - target: {fileID: 3167005094201446299, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3167005094516748111, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 616f6765bb7fc1144a7771c9339877be, type: 3}
-    - target: {fileID: 3167005094516748111, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
-      propertyPath: m_Color.b
-      value: 0.6226415
-      objectReference: {fileID: 0}
-    - target: {fileID: 3167005094516748111, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
-      propertyPath: m_Color.g
-      value: 0.6226415
-      objectReference: {fileID: 0}
-    - target: {fileID: 3167005094516748111, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
-      propertyPath: m_Color.r
-      value: 0.6226415
-      objectReference: {fileID: 0}
     - target: {fileID: 3167005095828969351, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3167005095828969351, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3167005095828969351, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19210a3ad8305884595ae08ff93c78ee, type: 3}
